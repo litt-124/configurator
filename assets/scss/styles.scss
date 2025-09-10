@@ -1,0 +1,194 @@
+@import "variables";
+@import "colors";
+@import "typography";
+@import "spacing";
+
+$primary: $brand-1;
+$secondary: $gray-600;
+$success: $success;
+$danger: $error;
+$warning: $warning;
+$info: $blue-500;
+$body-color: #000000;
+
+$font-family-sans-serif: $font-family-base;
+$font-weight-base: $fw-medium; // makes body text Medium
+$headings-font-weight: $fw-bold;
+$headings-line-height: $lh-tight;
+$line-height-base: $lh-body;
+
+$h1-font-size: #{$fs-5xl}px; // Headline L
+$h2-font-size: #{$fs-4xl}px; // Headline M
+$h3-font-size: #{$fs-3xl}px; // Headline S
+$h4-font-size: #{$fs-2xl}px; // Title 1
+$h5-font-size: #{$fs-xl}px; // Title 2
+$h6-font-size: #{$fs-lg}px; // Title 3
+
+$spacers: (
+  0: 0,
+  1: #{$space-2}px,
+  2: #{$space-3}px,
+  3: #{$space-4}px,
+  4: #{$space-6}px,
+  5: #{$space-8}px
+);
+@import "bootstrap/scss/bootstrap";
+
+
+.app-header {
+  height: var(--header-h);
+}
+.app-main {
+  height: calc(100% - var(--header-h));
+}
+.app-left {
+  background: var(--panel-bg);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: $text-2;
+}
+
+.app-header {
+  .navbar-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: auto;
+    border-bottom: 1px solid $border-1;
+  }
+
+  .nav-link {
+    color: $text-2;
+    padding: 11px 27px;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  .nav-tabs {
+    --bs-nav-tabs-border-width: 0;
+    --bs-nav-tabs-link-active-color: $text-2;
+
+  }
+}
+
+.app-left {
+  background: var(--panel-bg);
+}
+.tab-pane{
+  border-right: 1px solid $border-1;
+  height: 100%;
+  overflow: auto;
+}
+.accordion {
+  --bs-accordion-body-padding-y: 0;
+  --bs-accordion-body-padding-x: 0;
+  --bs-accordion-btn-padding-x: 0;
+  --bs-accordion-btn-padding-y: 0;
+  --bs-accordion-btn-bg: transparent;
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 15.5C11.7374 15.5005 11.4772 15.449 11.2346 15.3486C10.9919 15.2483 10.7715 15.1009 10.586 14.915L5.29297 9.62103L6.70697 8.20703L12 13.5L17.293 8.20703L18.707 9.62103L13.414 14.914C13.2285 15.1001 13.0081 15.2476 12.7655 15.3482C12.5228 15.4488 12.2626 15.5004 12 15.5Z' fill='%23495056'/%3E%3C/svg%3E");
+  --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M17.293 15.2066L12 9.91364L6.70697 15.2066L5.29297 13.7926L10.586 8.49964C10.961 8.12469 11.4696 7.91406 12 7.91406C12.5303 7.91406 13.0389 8.12469 13.414 8.49964L18.707 13.7926L17.293 15.2066Z' fill='%23495056'/%3E%3C/svg%3E");
+  --bs-accordion-btn-focus-box-shadow: none;
+  --bs-accordion-btn-icon-width: 24px;
+  --bs-accordion-btn-icon-height: 24px;
+  --bs-accordion-active-color: #{$text-1};
+  --bs-accordion-active-bg: transparent;
+  --bs-accordion-border-width: 1px;
+  --bs-accordion-border-color: #{$bg-3};
+
+}
+
+.accordion-header {
+  display: flex;
+  text-align: center;
+
+  .accordion-title {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* pretty color swatches (pure CSS, no JS) */
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: .5rem;
+  background: var(--sw);
+  border-color: rgba(0, 0, 0, .1) !important;
+}
+
+.btn-check:checked+.color-swatch {
+  outline: 2px solid #0d6efd;
+  outline-offset: 1px;
+}
+
+/* collapsed header layout: image → text+price → arrow */
+.accordion-item {
+  border-radius: 4px;
+  margin-bottom: 8px;
+  --bs-accordion-bg: #{$bg-3};
+
+  &:has(.show) {
+    --bs-accordion-bg: #{$neutral-white};
+  --bs-accordion-border-color: #{$border-2};
+  }
+&:not(:first-of-type) {
+border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);}
+  .accordion-button {
+    align-items: center;
+    color: $text-1;
+
+    &.collapsed {
+      .form-check {
+        display: none;
+      }
+
+      .description {
+        display: none;
+        margin: 16px 0 8px 0;
+      }
+    }
+
+    &:not(.collapsed) {
+      --bs-accordion-border-width: 0;
+        --bs-accordion-border-color: #{$bg-3};
+
+align-items: flex-start;
+      img {
+        display: none;
+      }
+    }
+
+    img {
+      margin-right: 16px;
+      height: 80px;
+      width: 80px;
+    }
+
+    .price {
+      margin-top: 8px;
+    }
+  }
+
+  .media-grid {
+    img:not(:last-of-type) {
+      margin-bottom: 16px;
+    }
+  }
+
+  img {
+    border-radius: 4px;
+    border: 1px solid $border-1;
+  }
+}
+
+.tab-content-inner{
+overflow: auto;
+padding: 0 8px;
+}

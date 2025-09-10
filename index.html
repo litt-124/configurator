@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Configurator</title>
+
+  <!-- Bootstrap (compiled CSS) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Optional icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Your compiled CSS -->
+  <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body class="bg-body">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="navbar-container">
+      <a class="navbar-brand fw-semibold">  <img src="/assets/img/logo.svg" alt="Graviers Design" height="32">
+</a>
+
+      <!-- DEFAULT BOOTSTRAP TABS -->
+      <ul class="nav nav-tabs app-tabs" id="headerTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pane-product" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-product"/></svg>
+                    <p>  Product</p>
+                </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-color" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-color"/></svg>
+                    <p>Color</p>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-size" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-size"/></svg>
+                    <p>Size</p>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-text" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-text"/></svg>
+                    <p>Text</p>
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-image" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-image"/></svg>
+                    <p>Image</p>
+          </button>
+        </li>
+         <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-fastening" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-fastening"/></svg>
+                    <p>  Fastening</p>
+          </button>
+        </li>
+         <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-image" type="button" role="tab">
+                  <svg class="icon " aria-hidden="true"><use href="#i-extensions"/></svg>
+                    <p>  Extensions</p>
+          </button>
+        </li>
+      </ul>
+
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="app-main">
+    <div class="row g-0 h-100">
+      <!-- LEFT PANEL (tab panes live here) -->
+      <aside class="col-12 col-md-4 col-lg-3 overflow-auto app-left">
+        <div class="tab-content h-100" id="leftPanelTabContent">
+          <!-- Product -->
+          <div class="tab-pane fade show active product-pane" id="pane-product" role="tabpanel">
+        <div class="accordion" id="productAccordion">
+<div class="accordion-header p-m">                   <svg class="icon " aria-hidden="true"><use href="#i-back-big"/></svg>
+    <div class="accordion-title typo-title-3-m">Product</div>
+</div>      
+<div class="tab-content-inner">
+
+<form id="productForm" class="">
+
+    <!-- Item 1 (collapsed by default) -->
+    <div class="accordion-item product-item p-m">
+      <h2 class="accordion-body-header">
+        <button class="accordion-button collapsed product-head" type="button"
+                data-bs-toggle="collapse" data-bs-target="#prod1"
+                aria-expanded="false" aria-controls="prod1">
+          <img src="https://picsum.photos/seed/p1/64/64" class="thumb" alt="">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="product" id="p1" value="single">
+            </div>
+          <div class="head-main">
+            <div class="title typo-body-2">Single House Number</div>
+                  <p class="description typo-caption-m">
+            Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam adipiscing blandit.
+          </p>
+            <div class="price text-md fw-bold">€ 23.99</div>
+          </div>
+          <!-- arrow is the default Bootstrap caret on the button -->
+        </button>
+      </h2>
+      <div id="prod1" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+        <div class="accordion-body">
+
+          <!-- multiple images supported -->
+          <div class="media-grid">
+            <img src="https://picsum.photos/seed/p1a/640/480" class="img-fluid rounded" alt="">
+            <img src="https://picsum.photos/seed/p1b/640/480" class="img-fluid rounded" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Item 2 (collapsed by default) -->
+<div class="accordion-item product-item p-m">
+  <h2 class="accordion-body-header">
+    <button class="accordion-button collapsed product-head" type="button"
+            data-bs-toggle="collapse" data-bs-target="#prod2"
+            aria-expanded="false" aria-controls="prod2">
+      <img src="https://picsum.photos/seed/p2/64/64" class="thumb" alt="">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="product" id="p2" value="double">
+      </div>
+      <div class="head-main">
+        <div class="title typo-body-2">Two Plates Number</div>
+        <p class="description typo-caption-m">
+          Durable, weather-resistant plate set with customizable styles.
+        </p>
+        <div class="price text-md fw-bold">€ 29.50</div>
+      </div>
+    </button>
+  </h2>
+  <div id="prod2" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+    <div class="accordion-body">
+      <div class="media-grid">
+        <img src="https://picsum.photos/seed/p2a/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p2b/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p2c/640/480" class="img-fluid rounded" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Item 3 (collapsed by default) -->
+<div class="accordion-item product-item p-m">
+  <h2 class="accordion-body-header">
+    <button class="accordion-button collapsed product-head" type="button"
+            data-bs-toggle="collapse" data-bs-target="#prod3"
+            aria-expanded="false" aria-controls="prod3">
+      <img src="https://picsum.photos/seed/p3/64/64" class="thumb" alt="">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="product" id="p3" value="triple">
+      </div>
+      <div class="head-main">
+        <div class="title typo-body-2">Three Plates Number</div>
+        <p class="description typo-caption-m">
+          Triple-layer option for larger displays, ideal for villas or offices.
+        </p>
+        <div class="price text-md fw-bold">€ 36.00</div>
+      </div>
+    </button>
+  </h2>
+  <div id="prod3" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+    <div class="accordion-body">
+      <div class="media-grid">
+        <img src="https://picsum.photos/seed/p3a/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p3b/640/480" class="img-fluid rounded" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Item 4 (collapsed by default) -->
+<div class="accordion-item product-item p-m">
+  <h2 class="accordion-body-header">
+    <button class="accordion-button collapsed product-head" type="button"
+            data-bs-toggle="collapse" data-bs-target="#prod4"
+            aria-expanded="false" aria-controls="prod4">
+      <img src="https://picsum.photos/seed/p4/64/64" class="thumb" alt="">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="product" id="p4" value="premium">
+      </div>
+      <div class="head-main">
+        <div class="title typo-body-2">Premium Designer Plate</div>
+        <p class="description typo-caption-m">
+          Crafted with premium materials and a sleek finish for modern homes.
+        </p>
+        <div class="price text-md fw-bold">€ 49.99</div>
+      </div>
+    </button>
+  </h2>
+  <div id="prod4" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+    <div class="accordion-body">
+      <div class="media-grid">
+        <img src="https://picsum.photos/seed/p4a/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p4b/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p4c/640/480" class="img-fluid rounded" alt="">
+        <img src="https://picsum.photos/seed/p4d/640/480" class="img-fluid rounded" alt="">
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+</form></div>
+</div>
+          </div>
+
+<!-- Color -->
+<div class="tab-pane fade show active product-pane" id="pane-color" role="tabpanel">
+  <div class="accordion" id="colorAccordion">
+    <div class="accordion-header p-m">
+      <svg class="icon" aria-hidden="true"><use href="#i-back-big"/></svg>
+      <div class="accordion-title typo-title-3-m">Color</div>
+    </div>      
+    <div class="tab-content-inner">
+
+<form id="colorForm" class="">
+
+  <!-- Anthracite RAL7016 -->
+  <div class="accordion-item product-item p-m">
+    <h2 class="accordion-body-header">
+      <button class="accordion-button collapsed product-head" type="button"
+              data-bs-toggle="collapse" data-bs-target="#col1"
+              aria-expanded="false" aria-controls="col1">
+        <img src="https://singlecolorimage.com/get/383E42/64x64" class="thumb" alt="Anthracite RAL7016">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="color" id="c1" value="ral7016">
+        </div>
+        <div class="head-main">
+          <div class="title typo-body-2">Anthracite RAL7016</div>
+          <p class="description typo-caption-m">
+            Solid anthracite grey (RAL 7016), classic and timeless.
+          </p>
+        </div>
+      </button>
+    </h2>
+    <div id="col1" class="accordion-collapse collapse" data-bs-parent="#colorAccordion">
+      <div class="accordion-body">
+        <div class="media-grid">
+          <img src="https://singlecolorimage.com/get/383E42/640x480" class="img-fluid rounded" alt="Anthracite RAL7016 swatch">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anthracite metallic -->
+  <div class="accordion-item product-item p-m">
+    <h2 class="accordion-body-header">
+      <button class="accordion-button collapsed product-head" type="button"
+              data-bs-toggle="collapse" data-bs-target="#col2"
+              aria-expanded="false" aria-controls="col2">
+        <img src="https://singlecolorimage.com/get/3F4549/64x64" class="thumb" alt="Anthracite metallic">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="color" id="c2" value="metallic">
+        </div>
+        <div class="head-main">
+          <div class="title typo-body-2">Anthracite metallic</div>
+          <p class="description typo-caption-m">
+            Dark grey finish with a subtle metallic sheen.
+          </p>
+        </div>
+      </button>
+    </h2>
+    <div id="col2" class="accordion-collapse collapse" data-bs-parent="#colorAccordion">
+      <div class="accordion-body">
+        <div class="media-grid">
+          <img src="https://singlecolorimage.com/get/3F4549/640x480" class="img-fluid rounded" alt="Anthracite metallic swatch">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Black -->
+  <div class="accordion-item product-item p-m">
+    <h2 class="accordion-body-header">
+      <button class="accordion-button collapsed product-head" type="button"
+              data-bs-toggle="collapse" data-bs-target="#col3"
+              aria-expanded="false" aria-controls="col3">
+        <img src="https://singlecolorimage.com/get/000000/64x64" class="thumb" alt="Black">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="color" id="c3" value="black">
+        </div>
+        <div class="head-main">
+          <div class="title typo-body-2">Black</div>
+          <p class="description typo-caption-m">
+            Deep, neutral black for a strong and modern contrast.
+          </p>
+        </div>
+      </button>
+    </h2>
+    <div id="col3" class="accordion-collapse collapse" data-bs-parent="#colorAccordion">
+      <div class="accordion-body">
+        <div class="media-grid">
+          <img src="https://singlecolorimage.com/get/000000/640x480" class="img-fluid rounded" alt="Black swatch">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- White -->
+  <div class="accordion-item product-item p-m">
+    <h2 class="accordion-body-header">
+      <button class="accordion-button collapsed product-head" type="button"
+              data-bs-toggle="collapse" data-bs-target="#col4"
+              aria-expanded="false" aria-controls="col4">
+        <img src="https://singlecolorimage.com/get/FFFFFF/64x64" class="thumb" alt="White">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="color" id="c4" value="white">
+        </div>
+        <div class="head-main">
+          <div class="title typo-body-2">White</div>
+          <p class="description typo-caption-m">
+            Clean, bright white for a fresh and minimal look.
+          </p>
+        </div>
+      </button>
+    </h2>
+    <div id="col4" class="accordion-collapse collapse" data-bs-parent="#colorAccordion">
+      <div class="accordion-body">
+        <div class="media-grid">
+          <img src="https://singlecolorimage.com/get/FFFFFF/640x480" class="img-fluid rounded" alt="White swatch">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+    </div>
+  </div>
+</div>
+
+
+          <!-- Size -->
+          <div class="tab-pane fade p-3" id="pane-size" role="tabpanel">
+            <h6 class="text-muted mb-3">Size</h6>
+            <div class="btn-group w-100" role="group" aria-label="Size">
+              <input type="radio" class="btn-check" name="size" id="s1" autocomplete="off">
+              <label class="btn btn-outline-secondary" for="s1">20×20</label>
+
+              <input type="radio" class="btn-check" name="size" id="s2" autocomplete="off" checked>
+              <label class="btn btn-outline-secondary" for="s2">30×30</label>
+
+              <input type="radio" class="btn-check" name="size" id="s3" autocomplete="off">
+              <label class="btn btn-outline-secondary" for="s3">40×40</label>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="tab-pane fade p-3" id="pane-text" role="tabpanel">
+            <h6 class="text-muted mb-3">Text</h6>
+            <form class="vstack gap-2">
+              <input class="form-control" placeholder="Line 1">
+              <input class="form-control" placeholder="Line 2">
+              <div class="d-flex gap-2">
+                <select class="form-select">
+                  <option>Inter</option>
+                  <option>Montserrat</option>
+                  <option>Playfair</option>
+                </select>
+                <input type="number" class="form-control" min="8" max="160" value="48">
+              </div>
+              <button class="btn btn-primary" type="button">Apply</button>
+            </form>
+          </div>
+
+          <!-- Image -->
+          <div class="tab-pane fade p-3" id="pane-image" role="tabpanel">
+            <h6 class="text-muted mb-3">Image</h6>
+            <input type="file" class="form-control">
+            <small class="text-muted d-block mt-2">PNG/JPG, up to 5MB.</small>
+          </div>
+          <!-- Fastening -->
+<div class="tab-pane fade show active product-pane" id="pane-fastening" role="tabpanel">
+  <div class="accordion" id="fasteningAccordion">
+    <div class="accordion-header p-m">
+      <svg class="icon" aria-hidden="true"><use href="#i-back-big"/></svg>
+      <div class="accordion-title typo-title-3-m">Fastening</div>
+    </div>
+
+    <div class="tab-content-inner">
+      <form id="fasteningForm" class="">
+
+        <!-- Without fixing material -->
+        <div class="accordion-item product-item p-m">
+          <h2 class="accordion-body-header">
+            <button class="accordion-button collapsed product-head" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#fast1"
+                    aria-expanded="false" aria-controls="fast1">
+              <img src="https://picsum.photos/seed/fast-none/64/64" class="thumb" alt="Without fixing material">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="fastening" id="f1" value="none">
+              </div>
+              <div class="head-main">
+                <div class="title typo-body-2">Without fixing material</div>
+                <p class="description typo-caption-m">
+                  Clean plate only. Choose this if you already have your own mounting solution.
+                </p>
+                <div class="price text-md fw-bold">€ 0</div>
+              </div>
+            </button>
+          </h2>
+          <div id="fast1" class="accordion-collapse collapse" data-bs-parent="#fasteningAccordion">
+            <div class="accordion-body">
+              <div class="media-grid">
+                <img src="https://picsum.photos/seed/fast-none-lg/640/480" class="img-fluid rounded" alt="Without fixing material">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Silicone adhesive -->
+        <div class="accordion-item product-item p-m">
+          <h2 class="accordion-body-header">
+            <button class="accordion-button collapsed product-head" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#fast2"
+                    aria-expanded="false" aria-controls="fast2">
+              <img src="https://picsum.photos/seed/fast-glue/64/64" class="thumb" alt="Silicone adhesive">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="fastening" id="f2" value="silicone-adhesive">
+              </div>
+              <div class="head-main">
+                <div class="title typo-body-2">Silicone adhesive</div>
+                <p class="description typo-caption-m">
+                  High-bond silicone adhesive for smooth surfaces. No drilling required.
+                </p>
+                <div class="price text-md fw-bold">€ 23.99</div>
+              </div>
+            </button>
+          </h2>
+          <div id="fast2" class="accordion-collapse collapse" data-bs-parent="#fasteningAccordion">
+            <div class="accordion-body">
+              <div class="media-grid">
+                <img src="https://picsum.photos/seed/fast-glue-lg/640/480" class="img-fluid rounded" alt="Silicone adhesive">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screw set (wall mounting kit) -->
+        <div class="accordion-item product-item p-m">
+          <h2 class="accordion-body-header">
+            <button class="accordion-button collapsed product-head" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#fast3"
+                    aria-expanded="false" aria-controls="fast3">
+              <img src="https://picsum.photos/seed/fast-screws/64/64" class="thumb" alt="Screw set & spacers">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="fastening" id="f3" value="screw-set">
+              </div>
+              <div class="head-main">
+                <div class="title typo-body-2">Screw set &amp; spacers</div>
+                <p class="description typo-caption-m">
+                  Wall mounting kit with screws, dowels and spacers for secure installation.
+                </p>
+                <div class="price text-md fw-bold">€ 23.99</div>
+              </div>
+            </button>
+          </h2>
+          <div id="fast3" class="accordion-collapse collapse" data-bs-parent="#fasteningAccordion">
+            <div class="accordion-body">
+              <div class="media-grid">
+                <img src="https://picsum.photos/seed/fast-screws-lg/640/480" class="img-fluid rounded" alt="Screw set & spacers">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      
+      </form>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </aside>
+
+      <!-- RIGHT WORKSPACE -->
+      <section class="col-12 col-md-8 col-lg-9 app-right">
+        <div class="workspace h-100">
+          <div class="artboard">
+            <div class="artboard-hint text-muted">Workspace</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (enables tabs) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<!-- SVG SPRITE (hidden) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-product" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 5C22 4.33696 21.7366 3.70107 21.2678 3.23223C20.7989 2.76339 20.163 2.5 19.5 2.5H4.5C3.83696 2.5 3.20107 2.76339 2.73223 3.23223C2.26339 3.70107 2 4.33696 2 5L2 10H2.83333V22.5H21.1667V10H22V5ZM3.66667 5C3.66667 4.77899 3.75446 4.56702 3.91074 4.41074C4.06702 4.25446 4.27899 4.16667 4.5 4.16667H19.5C19.721 4.16667 19.933 4.25446 20.0893 4.41074C20.2455 4.56702 20.3333 4.77899 20.3333 5V8.33333H3.66667V5ZM19.5 20.8333H4.5V10H19.5V20.8333Z" fill="currentColor"/>
+<path d="M15.3334 12.5H8.66675V14.1667H15.3334V12.5Z" fill="currentColor"/>
+  </symbol>
+<symbol id="i-color" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.8326 15.0198L22.0118 13.8405L10.6704 2.5L9.49203 3.67839L10.4346 4.62093L9.14451 5.91266L6.77106 3.50921L5.58601 4.68094L7.96612 7.08939L2.72004 12.3396C2.25134 12.8085 1.98804 13.4443 1.98804 14.1072C1.98804 14.7702 2.25134 15.406 2.72004 15.8748L8.61198 21.7676C8.84415 21.9998 9.11978 22.184 9.42313 22.3097C9.72649 22.4353 10.0516 22.5 10.38 22.5C10.7083 22.5 11.0335 22.4353 11.3368 22.3097C11.6402 22.184 11.9158 21.9998 12.148 21.7676L19.8634 14.053L20.8326 15.0198ZM10.9696 20.5859C10.811 20.7378 10.6 20.8225 10.3804 20.8225C10.1608 20.8225 9.94976 20.7378 9.79121 20.5859L3.89843 14.6931C3.74219 14.5368 3.65443 14.3249 3.65443 14.1039C3.65443 13.8829 3.74219 13.671 3.89843 13.5147L9.13784 8.27527L13.0622 12.2463L14.2473 11.0796L10.3154 7.09772L11.613 5.79932L18.685 12.8713L10.9696 20.5859ZM19.905 16.6632C19.905 16.6632 21.9885 19.2625 21.9885 20.4134C21.9885 20.9659 21.7689 21.4958 21.3782 21.8866C20.9875 22.2773 20.4576 22.4968 19.905 22.4968C19.3525 22.4968 18.8225 22.2773 18.4318 21.8866C18.0411 21.4958 17.8216 20.9659 17.8216 20.4134C17.8216 19.3716 19.905 16.6632 19.905 16.6632Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-size" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.71429 12.5H6.28571V8.48857C6.28571 7.55 7.05 6.78571 7.98857 6.78571H12V8.21429H8.72429L16.2857 15.7757V12.5H17.7143V16.5114C17.7143 17.45 16.95 18.2143 16.0114 18.2143H12V16.7857H15.2757L7.71429 9.22429V12.5ZM2 18.9286V6.07143C2 4.10143 3.60286 2.5 5.57143 2.5H18.4286C20.3971 2.5 22 4.10143 22 6.07143V18.9286C22 20.8986 20.3971 22.5 18.4286 22.5H5.57143C3.60286 22.5 2 20.8986 2 18.9286ZM3.42857 18.9286C3.42857 20.11 4.39 21.0714 5.57143 21.0714H18.4286C19.61 21.0714 20.5714 20.11 20.5714 18.9286V6.07143C20.5714 4.89 19.61 3.92857 18.4286 3.92857H5.57143C4.39 3.92857 3.42857 4.89 3.42857 6.07143V18.9286Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-text" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M21.818 14.5455V15.7727H20.1816V14.5455C20.1816 14.3164 20.0016 14.1364 19.7725 14.1364H17.7271V21.5H16.0907V14.1364H14.0453C13.8162 14.1364 13.6362 14.3164 13.6362 14.5455V15.7727H11.9998V14.5455C11.9998 13.4164 12.9162 12.5 14.0453 12.5H19.7725C20.9016 12.5 21.818 13.4164 21.818 14.5455ZM14.4544 5.13636C14.9044 5.13636 15.2725 5.50455 15.2725 5.95455V7.59091H16.9089V5.95455C16.9089 4.60455 15.8044 3.5 14.4544 3.5H4.63619C3.28619 3.5 2.18164 4.60455 2.18164 5.95455V7.59091H3.818V5.95455C3.818 5.50455 4.18619 5.13636 4.63619 5.13636H8.7271V21.5H10.3635V5.13636H14.4544Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-image" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.8333 2.5H6.16667C5.062 2.50132 4.00296 2.94073 3.22185 3.72185C2.44073 4.50296 2.00132 5.562 2 6.66667L2 18.3333C2.00132 19.438 2.44073 20.497 3.22185 21.2782C4.00296 22.0593 5.062 22.4987 6.16667 22.5H17.8333C18.938 22.4987 19.997 22.0593 20.7782 21.2782C21.5593 20.497 21.9987 19.438 22 18.3333V6.66667C21.9987 5.562 21.5593 4.50296 20.7782 3.72185C19.997 2.94073 18.938 2.50132 17.8333 2.5ZM6.16667 4.16667H17.8333C18.4964 4.16667 19.1323 4.43006 19.6011 4.8989C20.0699 5.36774 20.3333 6.00363 20.3333 6.66667V18.3333C20.3319 18.7046 20.2464 19.0707 20.0833 19.4042L12.4475 11.7683C12.0606 11.3813 11.6012 11.0743 11.0956 10.8648C10.59 10.6554 10.0481 10.5476 9.50083 10.5476C8.95357 10.5476 8.41166 10.6554 7.90606 10.8648C7.40047 11.0743 6.94109 11.3813 6.55417 11.7683L3.66667 14.655V6.66667C3.66667 6.00363 3.93006 5.36774 4.3989 4.8989C4.86774 4.43006 5.50363 4.16667 6.16667 4.16667ZM6.16667 20.8333C5.50363 20.8333 4.86774 20.5699 4.3989 20.1011C3.93006 19.6323 3.66667 18.9964 3.66667 18.3333V17.0117L7.73167 12.9467C7.96383 12.7144 8.2395 12.5301 8.54292 12.4043C8.84634 12.2786 9.17156 12.2139 9.5 12.2139C9.82844 12.2139 10.1537 12.2786 10.4571 12.4043C10.7605 12.5301 11.0362 12.7144 11.2683 12.9467L18.9042 20.5833C18.5707 20.7464 18.2046 20.8319 17.8333 20.8333H6.16667Z" fill="currentColor"/>
+<path d="M15.3332 11.2498C15.91 11.2498 16.4739 11.0788 16.9536 10.7583C17.4332 10.4378 17.8071 9.98228 18.0278 9.44933C18.2486 8.91638 18.3063 8.32994 18.1938 7.76416C18.0813 7.19838 17.8035 6.67868 17.3956 6.27078C16.9877 5.86287 16.468 5.58509 15.9022 5.47255C15.3364 5.36001 14.75 5.41777 14.217 5.63852C13.6841 5.85928 13.2285 6.23312 12.9081 6.71276C12.5876 7.1924 12.4165 7.75631 12.4165 8.33317C12.4165 9.10672 12.7238 9.84859 13.2708 10.3956C13.8178 10.9425 14.5596 11.2498 15.3332 11.2498ZM15.3332 7.08317C15.5804 7.08317 15.8221 7.15648 16.0276 7.29384C16.2332 7.43119 16.3934 7.62641 16.488 7.85482C16.5826 8.08323 16.6074 8.33456 16.5592 8.57703C16.5109 8.81951 16.3919 9.04224 16.2171 9.21706C16.0422 9.39187 15.8195 9.51092 15.577 9.55915C15.3346 9.60739 15.0832 9.58263 14.8548 9.48802C14.6264 9.39341 14.4312 9.2332 14.2938 9.02763C14.1565 8.82207 14.0832 8.5804 14.0832 8.33317C14.0832 8.00165 14.2149 7.68371 14.4493 7.44929C14.6837 7.21487 15.0017 7.08317 15.3332 7.08317Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-fastening" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M21.98 10.9968C21.9433 10.4401 21.6912 9.93264 21.2823 9.57541L15.5382 4.37636C12.1503 1.41167 8.69236 2.59604 7.33521 3.63685L6.53561 4.25032L11.3432 8.53793L2.01514 19.204L5.7861 22.5L15.08 11.8715L17.4262 13.964C17.8093 14.2987 18.2917 14.4798 18.7967 14.4798C18.8442 14.4798 18.891 14.4782 18.9394 14.4748C19.4953 14.4373 20.0036 14.186 20.3708 13.7662L21.4692 12.5092C21.8356 12.0894 22.0176 11.5527 21.98 10.9968ZM14.4289 5.62249L18.0062 8.86094L16.3436 10.7614L9.28246 4.46316C10.3742 4.03832 12.3014 3.76205 14.4289 5.62249ZM5.62751 20.1446L4.37053 19.0462L12.5893 9.64969L13.8347 10.7606L5.62751 20.1446ZM20.2122 11.4108L19.1138 12.6678C19.0153 12.7805 18.8918 12.8047 18.8275 12.8089C18.7641 12.8155 18.6372 12.8047 18.5321 12.7129L17.5906 11.8732L19.2449 9.98188L20.173 10.8224C20.2865 10.9209 20.3107 11.0444 20.3149 11.1087C20.3191 11.1721 20.3116 11.2981 20.2122 11.4108Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-extensions" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.1667 10H14.5V11.6667H11.1667V15H9.5V11.6667H6.16667V10H9.5V6.66667H11.1667V10ZM22 8.33333V22.5H5.33333V19.1667H2V5C2 3.62167 3.12167 2.5 4.5 2.5H16.1667C17.545 2.5 18.6667 3.62167 18.6667 5V5.83333H19.5C20.8783 5.83333 22 6.955 22 8.33333ZM3.66667 17.5H17V5C17 4.54083 16.6258 4.16667 16.1667 4.16667H4.5C4.04083 4.16667 3.66667 4.54083 3.66667 5V17.5ZM20.3333 8.33333C20.3333 7.87417 19.9592 7.5 19.5 7.5H18.6667V19.1667H7V20.8333H20.3333V8.33333Z" fill="currentColor"/>
+</symbol>
+<symbol id="i-back-big" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_8343_1007)">
+<path d="M24.0004 13V11L2.55538 11.031L6.87738 6.70697L5.46338 5.29297L0.877383 9.87897C0.31497 10.4416 -0.000976563 11.2045 -0.000976562 12C-0.000976563 12.7955 0.31497 13.5584 0.877383 14.121L5.46338 18.707L6.87738 17.293L2.61538 13.031L24.0004 13Z" fill="#495056"/>
+</g>
+<defs>
+<clipPath id="clip0_8343_1007">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</symbol>
+<symbol id="i-down" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15.5C11.7374 15.5005 11.4772 15.449 11.2346 15.3486C10.9919 15.2483 10.7715 15.1009 10.586 14.915L5.29297 9.62103L6.70697 8.20703L12 13.5L17.293 8.20703L18.707 9.62103L13.414 14.914C13.2285 15.1001 13.0081 15.2476 12.7655 15.3482C12.5228 15.4488 12.2626 15.5004 12 15.5Z" fill="#495056"/>
+</symbol>
+
+
+</svg>
+
+</html>

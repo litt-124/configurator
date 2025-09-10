@@ -1,0 +1,13 @@
+{
+  "name": "emo-configurator",
+  "private": true,
+  "scripts": {
+    "serve": "http-server -p 5173 -a 0.0.0.0 -c-1 .",
+    "css": "sass assets/scss/styles.scss assets/css/styles.css --no-source-map --watch"
+  },
+  "devDependencies": {
+    "bootstrap": "^5.3.8",
+    "http-server": "^14.1.1",
+    "sass": "^1.91.0"
+  }
+}

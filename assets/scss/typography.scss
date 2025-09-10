@@ -1,0 +1,103 @@
+// === Font family (Inter) =========================================
+// Option A: include in <head> (quick):
+// <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+// Option B: self-host with @font-face (skip this comment if using Google Fonts)
+$font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+// === Primitive font sizes (px) ===================================
+$fs-5xl: 36;
+$fs-4xl: 32;
+$fs-3xl: 28;
+$fs-2xl: 24;
+$fs-xl:  20;
+$fs-lg:  18;
+$fs-md:  16;
+$fs-sm:  14;
+$fs-xs:  12;
+
+// Line-heights (unitless multipliers)
+$lh-tight: 1.25; // 125% for headings/titles
+$lh-body:  1.40; // 140% for body/labels/captions
+
+// Weights
+$fw-regular: 400;   // "Regular"
+$fw-medium:  500;   // "Medium"
+$fw-semibold:600;   // "Semi Bold"
+$fw-bold:    700;   // "Bold"
+
+// Expose as CSS variables too (handy in runtime CSS)
+:root {
+  --ff-base: #{$font-family-base};
+  --fs-5xl: #{$fs-5xl}px;
+  --fs-4xl: #{$fs-4xl}px;
+  --fs-3xl: #{$fs-3xl}px;
+  --fs-2xl: #{$fs-2xl}px;
+  --fs-xl:  #{$fs-xl}px;
+  --fs-lg:  #{$fs-lg}px;
+  --fs-md:  #{$fs-md}px;
+  --fs-sm:  #{$fs-sm}px;
+  --fs-xs:  #{$fs-xs}px;
+
+  --lh-tight: #{$lh-tight};
+  --lh-body:  #{$lh-body};
+
+  --fw-regular:  #{$fw-regular};
+  --fw-medium:   #{$fw-medium};
+  --fw-semibold: #{$fw-semibold};
+  --fw-bold:     #{$fw-bold};
+}
+
+/* ---------- Lightweight utilities (classy + composable) ---------- */
+
+/* size utilities */
+.text-5xl { font-size: var(--fs-5xl) !important; }
+.text-4xl { font-size: var(--fs-4xl) !important; }
+.text-3xl { font-size: var(--fs-3xl) !important; }
+.text-2xl { font-size: var(--fs-2xl) !important; }
+.text-xl  { font-size: var(--fs-xl)  !important; }
+.text-lg  { font-size: var(--fs-lg)  !important; }
+.text-md  { font-size: var(--fs-md)  !important; }
+.text-sm  { font-size: var(--fs-sm)  !important; }
+.text-xs  { font-size: var(--fs-xs)  !important; }
+
+/* line-height utilities */
+.lh-tight { line-height: var(--lh-tight) !important; }
+.lh-body  { line-height: var(--lh-body)  !important; }
+
+/* weights (Bootstrap already has .fw-bold & .fw-semibold; add .fw-medium) */
+.fw-medium  { font-weight: var(--fw-medium) !important; }
+.fw-regular { font-weight: var(--fw-regular) !important; }
+
+/* letter-spacing (styleguide says 0, creating util for completeness) */
+.tracking-0 { letter-spacing: 0 !important; }
+
+/* ---------- Named text styles (from your "Text Styles" table) ---- */
+/* All use Inter, letter-spacing 0 */
+
+.typo-hl-l { font-family: var(--ff-base); font-weight: var(--fw-bold);     font-size: var(--fs-5xl); line-height: var(--lh-tight); letter-spacing: 0; }
+.typo-hl-m { font-family: var(--ff-base); font-weight: var(--fw-bold);     font-size: var(--fs-4xl); line-height: var(--lh-tight); letter-spacing: 0; }
+.typo-hl-s { font-family: var(--ff-base); font-weight: var(--fw-bold);     font-size: var(--fs-3xl); line-height: var(--lh-tight); letter-spacing: 0; }
+
+.typo-title-1   { font-family: var(--ff-base); font-weight: var(--fw-bold);     font-size: var(--fs-2xl); line-height: var(--lh-tight); letter-spacing: 0; }
+.typo-title-2   { font-family: var(--ff-base); font-weight: var(--fw-bold);     font-size: var(--fs-xl);  line-height: var(--lh-tight); letter-spacing: 0; }
+.typo-title-3   { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-lg);  line-height: var(--lh-tight); letter-spacing: 0; }
+.typo-title-3-m { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-lg);  line-height: var(--lh-tight); letter-spacing: 0; } // alias if you need “-M”
+
+.typo-label-L { font-family: var(--ff-base); font-weight: var(--fw-bold);   font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-label-M { font-family: var(--ff-base); font-weight: var(--fw-semibold); font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-label-S { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-xs); line-height: var(--lh-body); letter-spacing: 0; }
+
+.typo-body-1 { font-family: var(--ff-base); font-weight: var(--fw-medium);  font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-body-2 { font-family: var(--ff-base); font-weight: var(--fw-medium);  font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
+
+.typo-caption-l { font-family: var(--ff-base); font-weight: var(--fw-regular); font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-caption-m { font-family: var(--ff-base); font-weight: var(--fw-regular); font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-caption-s { font-family: var(--ff-base); font-weight: var(--fw-regular); font-size: var(--fs-xs); line-height: var(--lh-body); letter-spacing: 0; }
+
+/* sensible defaults */
+body {
+  font-family: var(--ff-base);
+  font-weight: var(--fw-medium); // your spec uses Medium for body
+  line-height: var(--lh-body);
+  letter-spacing: 0;
+}

@@ -1,0 +1,76 @@
+// === Primitive spacing scale (px) ================================
+// from your spec: 4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,68,72,76,80
+$space-1:  4;
+$space-2:  8;
+$space-3:  12;
+$space-4:  16;
+$space-5:  20;
+$space-6:  24;
+$space-7:  28;
+$space-8:  32;
+$space-9:  36;
+$space-10: 40;
+$space-11: 44;
+$space-12: 48;
+$space-13: 52;
+$space-14: 56;
+$space-15: 60;
+$space-16: 64;
+$space-17: 68;
+$space-18: 72;
+$space-19: 76;
+$space-20: 80;
+
+// expose as CSS variables too (runtime-friendly)
+:root {
+  --space-1:  #{$space-1}px;
+  --space-2:  #{$space-2}px;
+  --space-3:  #{$space-3}px;
+  --space-4:  #{$space-4}px;
+  --space-5:  #{$space-5}px;
+  --space-6:  #{$space-6}px;
+  --space-7:  #{$space-7}px;
+  --space-8:  #{$space-8}px;
+  --space-9:  #{$space-9}px;
+  --space-10: #{$space-10}px;
+  --space-11: #{$space-11}px;
+  --space-12: #{$space-12}px;
+  --space-13: #{$space-13}px;
+  --space-14: #{$space-14}px;
+  --space-15: #{$space-15}px;
+  --space-16: #{$space-16}px;
+  --space-17: #{$space-17}px;
+  --space-18: #{$space-18}px;
+  --space-19: #{$space-19}px;
+  --space-20: #{$space-20}px;
+}
+
+/* ===== Handy utilities (in addition to Bootstrap's p-/m-/gap-) === */
+.gap-1x  { gap: var(--space-1)  !important; }
+.gap-2x  { gap: var(--space-2)  !important; }
+.gap-3x  { gap: var(--space-3)  !important; }
+.gap-4x  { gap: var(--space-4)  !important; }
+.gap-5x  { gap: var(--space-5)  !important; }
+.gap-6x  { gap: var(--space-6)  !important; }
+.gap-7x  { gap: var(--space-7)  !important; }
+.gap-8x  { gap: var(--space-8)  !important; }
+.gap-9x  { gap: var(--space-9)  !important; }
+.gap-10x { gap: var(--space-10) !important; }
+
+/* Vertical stack helper: put space between children only */
+.stack > * + * { margin-top: var(--stack-space, var(--space-4)); }
+/* e.g. <div class="stack" style="--stack-space: var(--space-6)">… */
+
+/* Horizontal cluster helper (wrap with consistent gaps) */
+.cluster {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--cluster-space, var(--space-3));
+}
+
+/* Content padding presets from your guide (optional aliases) */
+.p-xxs { padding: var(--space-1)  !important; }
+.p-xs  { padding: var(--space-2)  !important; }
+.p-s   { padding: var(--space-3)  !important; }
+.p-m   { padding: var(--space-4)  !important; }
+.p-l   { padding: var(--space-6)  !important; }
+.p-xl  { padding: var(--space-8)  !important; }

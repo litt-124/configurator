@@ -1,0 +1,159 @@
+// === Primitive Colors ===
+$gray-900: #212529;
+$gray-800: #343A40;
+$gray-700: #495056;
+$gray-600: #666075;
+$gray-500: #848C94;
+$gray-400: #ADB5BD;
+$gray-300: #CED4DA;
+$gray-200: #DEE2E6;
+$gray-100: #E9ECEF;
+$gray-80:  #F1F3F5;
+$gray-60:  #F5F6F7;
+$gray-50:  #F8F9FA;
+
+$neutral-black:   #000000;
+$neutral-200:     #9E9E9E;
+$neutral-100:     #E0E0E0;
+$neutral-white:   #FFFFFF;
+
+$beige-900: #383B3B;
+$beige-800: #4A4A6A;
+$beige-700: #655E58;
+$beige-600: #868379;
+$beige-500: #7E7E66;
+$beige-400: #E3DFDB;
+$beige-300: #F1EDE5;
+$beige-200: #F1EFE8;
+$beige-100: #F2F0EA;
+$beige-70:  #F8F6F1;
+$beige-60:  #F6F5F1;
+$beige-50:  #F7F6F4;
+
+$blue-900: #01457D;
+$blue-800: #025BA5;
+$blue-700: #0A70C2;
+$blue-600: #1583BD;
+$blue-500: #2896ED;
+$blue-400: #51ABF3;
+$blue-300: #88BFFF;
+$blue-200: #C1DFFF;
+$blue-100: #D3F7FF;
+$blue-80:  #E7F4FD;
+$blue-50:  #F5FBFF;
+
+$green-900: #0A4534;
+$green-800: #10634C;
+$green-700: #137B5E;
+$green-600: #1C9674;
+$green-500: #27AB86;
+$green-400: #338B93;
+$green-300: #58CAAB;
+$green-200: #71D2B8;
+$green-100: #94E7D1;
+$green-80:  #D7F6EE;
+$green-50:  #E6FBF3;
+
+$green-warm-500: #00411A;
+$green-warm-400: #104F3A;
+$green-warm-300: #0C6B78;
+$green-warm-200: #65837D;
+$green-warm-100: #E6FCEB;
+
+$yellow-500: #FF5400;
+$yellow-400: #FFA016;
+$yellow-300: #FFB934;
+$yellow-200: #FFC158;
+$yellow-100: #FFD814;
+$yellow-50:  #F3C806;
+
+$red-400: #BB2A2A;
+$red-300: #FF5745;
+$red-200: #FA5A4A;
+$red-100: #FACEB8;
+
+// === Brand Colors ===
+$brand-1: #8E8379;
+$brand-2: #655E58;
+
+// === Backgrounds ===
+$bg-1: #FFFFFF;
+$bg-2: #F8F9FA;
+$bg-3: #F1F3F5;
+$bg-4: #DEE2E6;
+$bg-5: #F7F6F4;
+$bg-6: #F6F5F1;
+$bg-7: #F8F6F1;
+$bg-8: #F2F0EA;
+$bg-9: #F1EFE8;
+$bg-10: #F1EDE5;
+
+// === Borders ===
+$border-1: #DEE2E6;
+$border-2: #343A40;
+$border-3: #E3DFDB;
+$border-4: #E7E6E6;
+
+// === Text ===
+$text-1: #212529;
+$text-2: #495056;
+$text-3: #014F5A;
+
+// === Semantic ===
+$success:        #65837D;
+$success-surface:#EBFCEB;
+
+$error:          #FA5A4A;
+$error-surface:  #FACEB8;
+
+$warning:        #FFB934;
+$warning-border: #FFA016;
+
+$discount:       #FF5400;
+
+
+:root {
+  // Gray
+  --gray-900: #{$gray-900};
+  --gray-800: #{$gray-800};
+  --gray-700: #{$gray-700};
+  --gray-600: #{$gray-600};
+  --gray-500: #{$gray-500};
+  --gray-400: #{$gray-400};
+  --gray-300: #{$gray-300};
+  --gray-200: #{$gray-200};
+  --gray-100: #{$gray-100};
+  --gray-80:  #{$gray-80};
+  --gray-60:  #{$gray-60};
+  --gray-50:  #{$gray-50};
+
+  // Brand
+  --brand-1: #{$brand-1};
+  --brand-2: #{$brand-2};
+
+  // Background
+  --bg-1: #{$bg-1};
+  --bg-2: #{$bg-2};
+  --bg-3: #{$bg-3};
+  --bg-4: #{$bg-4};
+  --bg-5: #{$bg-5};
+  --bg-6: #{$bg-6};
+  --bg-7: #{$bg-7};
+  --bg-8: #{$bg-8};
+  --bg-9: #{$bg-9};
+  --bg-10: #{$bg-10};
+
+  // Text
+  --text-1: #{$text-1};
+  --text-2: #{$text-2};
+  --text-3: #{$text-3};
+
+  // Semantic
+  --success:        #{$success};
+  --success-surface:#{$success-surface};
+  --error:          #{$error};
+  --error-surface:  #{$error-surface};
+  --warning:        #{$warning};
+  --warning-border: #{$warning-border};
+  --discount:       #{$discount};
+}

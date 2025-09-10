@@ -1,0 +1,12 @@
+// your app tokens (SCSS + CSS vars)
+$left-width: 320px;
+
+:root {
+  --header-h: 66px;
+  --left-w: #{$left-width};
+  --panel-bg: #fff;
+  --workspace-bg: #f6f7f9;
+    --bs-body-color: #000000;
+
+
+}
