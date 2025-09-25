@@ -1,0 +1,70 @@
+/* only the middle boxes get styling; inputs/buttons remain default Bootstrap */
+
+$box-pad-y: 12px;
+$box-pad-x: 14px;
+
+/* uses your tokens if present; otherwise Bootstrap fallbacks */
+$box-bg:     if(global-variable-exists(bg-3), $bg-3, var(--bs-gray-100));
+$box-border: if(global-variable-exists(border-1), $border-1, var(--bs-border-color));
+$box-link:   if(global-variable-exists(brand-1), $brand-1, var(--bs-primary));
+
+/* shape chooser */
+.select-row {
+  background: $box-bg;
+  border: 1px solid $box-border;
+  border-radius: 4px;
+  padding: $box-pad-y $box-pad-x;
+
+  &__label { color: var(--bs-secondary-color, #6c757d); }
+
+  &__button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: $text-3;
+    text-decoration: underline;
+    font-weight: 500;
+
+    /* keep Bootstrap caret */
+    &.dropdown-toggle::after {
+      margin-left: .35rem;
+    }
+  }
+}
+hr{
+  color: $border-1;
+  opacity: 1;
+}
+.selected-type-label,.selected-type-price{
+  color: $text-1;
+}
+.selected-type-percentage{
+  color: $text-2;
+}
+/* slider container with 0% | range | 100% */
+.range-wrap {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  background: transparent;
+  border: 1px solid $box-border;
+  border-radius: 4px;
+  padding: $box-pad-y $box-pad-x;
+
+  .range-min, .range-max {color: $text-2; }
+}
+
+/* keep the default Bootstrap slider look, just center the thumb on the track */
+.form-range {
+  &::-webkit-slider-runnable-track { height: 6px; }
+  &::-webkit-slider-thumb         { margin-top: -4px; background: $text-1;} /* centers on 6px track */
+  &::-moz-range-track             { height: 6px; }
+  &::-moz-range-thumb             { height: 20px; width: 20px;  background: $text-1;}
+}
+
+
+
+
+

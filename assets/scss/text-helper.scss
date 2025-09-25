@@ -1,0 +1,184 @@
+.text-card {
+  border: 1px solid $border-1;
+  border-radius: 4px;
+  background: $neutral-white;
+  margin-top: 16px;
+
+  &:not(.is-editing) {
+    .exit-edit {
+      display: none;
+    }
+  }
+
+  &.is-editing {
+    padding: 0;
+.icon-edit{
+  display: none;
+}
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 24px 16px 16px 16px;
+  }
+
+  &__title {
+    color: $text-1;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .icon-btn {
+    background: transparent;
+    border: 0;
+    padding: 2px;
+    line-height: 1;
+    display: inline-flex;
+  }
+
+  /* advanced view hidden by default */
+  &__advanced {
+    display: none;
+    margin: 16px 16px 24px 16px;
+  }
+
+  &.is-editing {
+    &>.mb-3:first-of-type {
+      /* optional: hide simple input while editing */
+    }
+
+    & .text-card__advanced {
+      display: block;
+    }
+  }
+}
+
+
+
+/* re-use your select-row styles from earlier */
+.select-row {
+  background: $bg-3;
+  border: 1px solid $border-1;
+  border-radius: 10px;
+  padding: 12px 14px;
+
+  &__label {
+    color: $text-2;
+  }
+
+  &__button {
+    background: transparent;
+    border: 0;
+    color: $brand-1;
+    text-decoration: underline;
+    padding: 0;
+  }
+}
+
+
+/* toolbar at the very top — hidden until editing */
+.adv-toolbar {
+  display: none;
+}
+
+/* the advanced body is also hidden until editing */
+.text-card__advanced {
+  display: none;
+}
+
+/* simple input is visible by default */
+.text-card__simple {
+  display: block;
+  margin: 16px;
+}
+
+/* when the card enters editing mode */
+.text-card.is-editing {
+
+  /* top toolbar in advanced view */
+  .adv-toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 16px;
+    background-color: $bg-2;
+    border-bottom: 1px solid $border-1;
+
+    .size-stepper {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      color: #{$gray-800};
+
+      .form-control {
+        padding: 4px 12px;
+        border-color: #{$gray-800};
+        width: 40px;
+        background-color: transparent;
+      }
+    }
+
+    .align-group {
+      display: inline-flex;
+      gap: 6px;
+      justify-self: end;
+
+      .btn {
+        color: $text-disabled;
+      }
+    }
+
+    .adv-actions {
+      display: inline-flex;
+      gap: 10px;
+    }
+
+    .btn {
+      --bs-btn-padding-x: 0;
+      --bs-btn-padding-y: 0;
+      --bs-btn-color:#{$text-2};
+    }
+  }
+
+  .text-card__advanced {
+    display: block;
+  }
+
+  .text-card__simple {
+    display: none;
+  }
+}
+
+#workCanvasContainer {
+  position: relative;
+  background: #fff;
+}
+.canvas-container{
+  margin: auto;
+}
+#workCanvas {
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  border: 1px solid $border-1;
+}
+
+.add-text-cta {
+  --bs-btn-padding-x: 16px;
+  --bs-btn-padding-y: 12px;
+  --bs-btn-bg:#{$bg-3};
+  font-family: var(--ff-base);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  letter-spacing: 0;
+  color: $text-1;
+
+}

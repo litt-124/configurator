@@ -33,14 +33,26 @@ $spacers: (
   5: #{$space-8}px
 );
 @import "bootstrap/scss/bootstrap";
+@import "buttons";
+@import "forms";
+@import "text-helper";
+@import "images";
 
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
 
 .app-header {
   height: var(--header-h);
 }
+
 .app-main {
   height: calc(100% - var(--header-h));
 }
+
 .app-left {
   background: var(--panel-bg);
 }
@@ -51,40 +63,52 @@ $spacers: (
   color: $text-2;
 }
 
-.app-header {
-  .navbar-container {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    overflow: auto;
-    border-bottom: 1px solid $border-1;
-  }
+.navbar-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: auto;
+  border-bottom: 1px solid $border-1;
+}
 
-  .nav-link {
-    color: $text-2;
-    padding: 11px 27px;
-
-    p {
-      margin-bottom: 0;
-    }
-  }
-
-  .nav-tabs {
-    --bs-nav-tabs-border-width: 0;
-    --bs-nav-tabs-link-active-color: $text-2;
-
+.nav-link {
+  padding: 11px 27px;
+  height: 100%;
+  --bs-nav-tabs-link-active-color: #{$text-2};
+  --bs-nav-link-color: #{$text-2};
+  --bs-nav-tabs-link-color: #{$text-2};
+--bs-nav-link-hover-color: #{$text-2};
+--bs-nav-tabs-link-active-bg:#{$bg-2};
+--bs-nav-tabs-link-active-border-color:#{border-2};
+--bs-nav-link-font-size:var(--fs-xs);
+&:hover{
+  background-color: #{$bg-2};
+}
+&.active{
+  border-bottom: 3px solid $border-2;
+}
+  p {
+    margin-bottom: 0;
   }
 }
+
+.nav-tabs {
+  --bs-nav-tabs-border-width: 0;
+  --bs-nav-tabs-link-active-color: $text-2;
+}
+
 
 .app-left {
   background: var(--panel-bg);
 }
-.tab-pane{
+
+.tab-pane {
   border-right: 1px solid $border-1;
   height: 100%;
   overflow: auto;
 }
+
 .accordion {
   --bs-accordion-body-padding-y: 0;
   --bs-accordion-body-padding-x: 0;
@@ -112,23 +136,9 @@ $spacers: (
     text-align: center;
   }
 }
-
-/* pretty color swatches (pure CSS, no JS) */
-.color-swatch {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border-radius: .5rem;
-  background: var(--sw);
-  border-color: rgba(0, 0, 0, .1) !important;
+.accordion-body-header{
+  margin-bottom: 0;
 }
-
-.btn-check:checked+.color-swatch {
-  outline: 2px solid #0d6efd;
-  outline-offset: 1px;
-}
-
-/* collapsed header layout: image → text+price → arrow */
 .accordion-item {
   border-radius: 4px;
   margin-bottom: 8px;
@@ -136,10 +146,27 @@ $spacers: (
 
   &:has(.show) {
     --bs-accordion-bg: #{$neutral-white};
-  --bs-accordion-border-color: #{$border-2};
+    --bs-accordion-border-color: #{$border-2};
   }
-&:not(:first-of-type) {
-border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);}
+
+  &:not(:first-of-type) {
+    border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);
+  }
+.thumb-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  margin-right: 16px;
+  border-radius: 4px;
+  background: $gray-300;
+  color: $gray-500;
+flex-shrink: 0;
+}
+.form-check{
+  align-self: flex-start;
+}
   .accordion-button {
     align-items: center;
     color: $text-1;
@@ -157,11 +184,14 @@ border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);
 
     &:not(.collapsed) {
       --bs-accordion-border-width: 0;
-        --bs-accordion-border-color: #{$bg-3};
+      --bs-accordion-border-color: #{$bg-3};
 
-align-items: flex-start;
       img {
         display: none;
+      }
+      .thumb-box{
+        background-color: $blue-600;
+        color: $neutral-white;
       }
     }
 
@@ -188,7 +218,12 @@ align-items: flex-start;
   }
 }
 
-.tab-content-inner{
-overflow: auto;
-padding: 0 8px;
+.tab-content-inner {
+  overflow: auto;
+  padding: 0 8px;
+  height: calc(100vh - 125px);
+}
+
+.media-grid{
+  margin-top: 16px;
 }

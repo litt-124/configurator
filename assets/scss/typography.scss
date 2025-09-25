@@ -83,9 +83,9 @@ $fw-bold:    700;   // "Bold"
 .typo-title-3   { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-lg);  line-height: var(--lh-tight); letter-spacing: 0; }
 .typo-title-3-m { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-lg);  line-height: var(--lh-tight); letter-spacing: 0; } // alias if you need “-M”
 
-.typo-label-L { font-family: var(--ff-base); font-weight: var(--fw-bold);   font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
-.typo-label-M { font-family: var(--ff-base); font-weight: var(--fw-semibold); font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
-.typo-label-S { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-xs); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-label-l { font-family: var(--ff-base); font-weight: var(--fw-bold);   font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-label-m { font-family: var(--ff-base); font-weight: var(--fw-semibold); font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
+.typo-label-s { font-family: var(--ff-base); font-weight: var(--fw-medium);   font-size: var(--fs-xs); line-height: var(--lh-body); letter-spacing: 0; }
 
 .typo-body-1 { font-family: var(--ff-base); font-weight: var(--fw-medium);  font-size: var(--fs-md); line-height: var(--lh-body); letter-spacing: 0; }
 .typo-body-2 { font-family: var(--ff-base); font-weight: var(--fw-medium);  font-size: var(--fs-sm); line-height: var(--lh-body); letter-spacing: 0; }
