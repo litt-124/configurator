@@ -76,7 +76,7 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-image" type="button" role="tab">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-extension" type="button" role="tab">
                         <svg class="icon " aria-hidden="true">
                             <use href="#i-extensions" />
                         </svg>
@@ -1058,7 +1058,7 @@
 
                     </div>
                     <!-- Fastening -->
-                    <div class="tab-pane fade product-pane" id="pane-fastening" role="tabpanel">
+                    <div class="tab-pane fade" id="pane-fastening" role="tabpanel">
                         <div class="accordion" id="fasteningAccordion">
                             <div class="accordion-header p-m">
                                 <svg class="icon" aria-hidden="true">
@@ -1174,7 +1174,80 @@
                             </div>
                         </div>
                     </div>
+            <!-- Extension -->
+                    <div class="tab-pane fade p-3 " id="pane-extension" role="tabpanel">
+                        <div class="accordion" id="plateAccordion">
+                            <div class="accordion-header p-m">
+                                <svg class="icon" aria-hidden="true">
+                                    <use href="#i-back-big" />
+                                </svg>
+                                <div class="accordion-title typo-title-3-m">Extensions</div>
+                            </div>
 
+                            <div class="tab-content-inner">
+
+                                <!-- 2. First Plate -->
+                                <div class="accordion-item p-m">
+                                    <h2 class="accordion-body-header">
+                                        <button class="accordion-button collapsed product-head" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#plate2" aria-expanded="false"
+                                            aria-controls="plate2">
+                                            <div class="thumb-box typo-title-3" aria-hidden="true">1</div>
+                                            <div class="head-main">
+                                                <div class="title typo-body-2">Title</div>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div id="plate2" class="accordion-collapse collapse"
+                                        data-bs-parent="#plateAccordion">
+                                        <div class="accordion-body">
+                                            <p class="mt-2 description typo-caption-m">
+                                                Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam
+                                                adipiscing blandit.
+                                                Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam
+                                                adipiscing blandit.
+                                            </p>
+
+                                <btn class="btn btn-primary w-100 mb-2">Save</btn>
+                                <div class="row g-4 pet-grid">
+  <!-- repeat this .col for as many items as you need -->
+  <div class="col-12 col-sm-6">
+    <article class="pet-card">
+      <div class="pet-card__media">
+        <img src="/assets/img/logo.svg" alt="Brand logo">
+      </div>
+
+      <div class="pet-card__body">
+        <h3 class="pet-card__title typo-body-2">Title </h3>
+        <div class="pet-card__price typo-title-3">+ 3.00 €</div>
+      </div>
+    </article>
+  </div>
+
+  <!-- duplicate cols -->
+  <div class="col-12 col-sm-6">
+    <article class="pet-card">
+      <div class="pet-card__media">
+        <img src="/assets/img/logo.svg" alt="Brand logo">
+      </div>
+      <div class="pet-card__body">
+        <h3 class="pet-card__title typo-body-2">Title</h3>
+        <div class="pet-card__price typo-title-3">+ 3.00 €</div>
+      </div>
+    </article>
+  </div>
+
+  <!-- …add more items… -->
+</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </aside>
 
