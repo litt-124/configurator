@@ -15,6 +15,7 @@ export function initCanvas() {
 
   // 🔴 track whether we're pushing against edges during a drag
   canvas._edgeViolate = false;
+enableStraightGuide(2); // threshold in degrees (tweak if you want)
 
   canvas.on('mouse:down', () => {
     const o = canvas.getActiveObject();
@@ -203,6 +204,86 @@ export function updateTextObject(id, newText) {
   o.setCoords();
   canvas?.requestRenderAll();
 }
+export function enableStraightGuide(thresholdDeg = 1) {
+  initCanvas();
+  if (canvas._straightGuideHooked) return;
+  canvas._straightGuideHooked = true;
+
+  const angDiff = (a, b) => {
+    let d = Math.abs(((a - b) % 360 + 360) % 360);
+    if (d > 180) d = 360 - d;
+    return d;
+  };
+  const nearestRight = (ang) => {
+    const targets = [0, 90, 180, 270];
+    let best = 0, dmin = Infinity;
+    for (const t of targets) {
+      const d = angDiff(ang, t);
+      if (d < dmin) { dmin = d; best = t; }
+    }
+    return { target: best, delta: dmin };
+  };
+
+  canvas.on('object:rotating', (e) => {
+    const o = e.target;
+    if (!o) return;
+
+    const { target, delta } = nearestRight(o.angle || 0);
+    if (delta <= thresholdDeg) {
+      const center = o.getCenterPoint();
+      // length = scaled width (always)
+      const len = Math.max(2,
+        typeof o.getScaledWidth === 'function'
+          ? o.getScaledWidth()
+          : (o.width ?? 0) * (o.scaleX ?? 1)
+      );
+
+      // unit vector along width axis (parallel to the guide)
+      const rad = (o.angle || 0) * Math.PI / 180;
+      const ux = Math.cos(rad), uy = Math.sin(rad);
+
+let fs = Number(o.fontSize);
+if (!isFinite(fs) || fs <= 0) fs = 16;          
+const offsetPx = (fs * (o.scaleY ?? 1)) / 2 + 4;      let cx = center.x, cy = center.y;
+      if (target === 0 || target === 180) {
+        // horizontal → move a bit DOWN in screen space
+        cy += offsetPx;
+      } else {
+        // vertical → move a bit LEFT in screen space
+        cx -= offsetPx;
+      }
+
+      const half = len / 2;
+      canvas._straightGuide = {
+        x1: cx - ux * half, y1: cy - uy * half,
+        x2: cx + ux * half, y2: cy + uy * half,
+      };
+    } else {
+      canvas._straightGuide = null;
+    }
+    canvas.requestRenderAll();
+  });
+
+  canvas.on('mouse:up', () => {
+    canvas._straightGuide = null;
+    canvas.requestRenderAll();
+  });
+
+  canvas.on('after:render', () => {
+    const g = canvas._straightGuide;
+    if (!g) return;
+    const ctx = canvas.contextContainer;
+    ctx.save();
+    ctx.strokeStyle = '#7A3FF2';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(g.x1 + 0.5, g.y1 + 0.5);
+    ctx.lineTo(g.x2 + 0.5, g.y2 + 0.5);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+
 
 export function removeObject(id) {
   const o = objectsById.get(id);
