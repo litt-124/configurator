@@ -1,0 +1,14 @@
+/* 1) Load your custom Aero font (adjust path/format as needed) */
+@font-face {
+  font-family: "Aero";
+  src: url("/assets/fonts/Aero.woff2") format("woff2");
+  font-display: swap; /* okay to swap in UI, Fabric will still wait */
+}
+
+/* 2) Minimal helper classes (used on the card for visual reflection only) */
+.font-aero {
+  font-family: "Aero", Arial, sans-serif;
+}
+.font-arial {
+  font-family: Arial, sans-serif;
+}

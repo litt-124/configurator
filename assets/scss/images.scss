@@ -31,3 +31,21 @@ flex-direction: column;}
         margin-right: 8px;
     }
 }
+.image-lib .lib-title { color: var(--text-2, #666); margin-bottom: 6px; }
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+.img-card {
+  display: flex; flex-direction: column; gap: 10px; text-align: center;
+}
+.img-thumb {
+    border: 1px solid $bg-2;
+  height: 80px; background: $bg-2; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.img-thumb svg, .img-thumb img { max-width: 100%; max-height: 100%; }
+.img-edit-action{
+    color: $blue-600;
+}

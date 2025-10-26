@@ -76,7 +76,8 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-extension" type="button" role="tab">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-extension" type="button"
+                        role="tab">
                         <svg class="icon " aria-hidden="true">
                             <use href="#i-extensions" />
                         </svg>
@@ -819,14 +820,17 @@
 <div class="text-card js-text-card">
   <!-- ADV TOOLBAR (always first, hidden by default) -->
   <div class="adv-toolbar js-advanced-toolbar">
-    <div class="dropdown">
-      <button class="btn btn-sm  dropdown-toggle typo-caption-m" data-bs-toggle="dropdown" type="button">Aero</button>
-      <ul class="dropdown-menu">
-        <li><button class="dropdown-item" type="button">Aero</button></li>
-        <li><button class="dropdown-item" type="button">Sans</button></li>
-        <li><button class="dropdown-item" type="button">Serif</button></li>
-      </ul>
-    </div>
+<div class="dropdown font-picker">
+  <button class="btn btn-sm dropdown-toggle typo-caption-m" data-bs-toggle="dropdown" type="button">
+    <span class="current-font">Aero</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><button class="dropdown-item" type="button" data-font="aero"  data-label="Aero">Aero</button></li>
+    <li><button class="dropdown-item" type="button" data-font="arial"  data-label="Sans">Arial</button></li>
+    <li><button class="dropdown-item" type="button" data-font="serif" data-label="Serif">Serif</button></li>
+  </ul>
+</div>
+
 
     <div class="size-stepper">
       <button class="btn" type="button"><svg class="icon" aria-hidden="true">
@@ -942,29 +946,29 @@
                                         <span class="typo-body-2">Browse our archive</span>
                                     </button>
 
-                                    <label
-                                        class="btn btn-light w-100 p-m d-flex align-items-center justify-content-center">
-                                        <svg class="icon" aria-hidden="true">
-                                            <use href="#i-file-upload" />
-                                        </svg>
-                                        <span class="typo-body-2">Upload your images</span>
-                                        <input type="file" accept="image/svg+xml" class="d-none" multiple>
-                                    </label>
+                     <label class="btn btn-light w-100 p-m d-flex align-items-center justify-content-center">
+  <svg class="icon" aria-hidden="true"><use href="#i-file-upload" /></svg>
+  <span class="typo-body-2">Upload your images</span>
+  <input id="svgUploadInput" type="file" accept=".svg,image/svg+xml" class="d-none">
+</label>
+
 
                                     <div class="typo-caption-m mt-2 text-muted">
-                                        <b>Note:</b> Please upload images in <a href="#" class="link-underline">SVG format</a>
+                                        <b>Note:</b> Please upload images in <a href="#" class="link-underline">SVG
+                                            format</a>
                                         only.
                                     </div>
                                 </div>
 
                                 <!-- 2) Archive block (hidden until Browse is clicked) -->
                                 <div class="js-image-archive image-archive d-none">
-                                  <div class="search-wrap mb-2">
-  <input type="search" class="form-control search-input" placeholder="Search" aria-label="Search">
-  <svg class="icon search-icon" aria-hidden="true">
-    <use href="#i-search" />
-  </svg>
-</div>
+                                    <div class="search-wrap mb-2">
+                                        <input type="search" class="form-control search-input" placeholder="Search"
+                                            aria-label="Search">
+                                        <svg class="icon search-icon" aria-hidden="true">
+                                            <use href="#i-search" />
+                                        </svg>
+                                    </div>
 
 
                                     <!-- Just static placeholders for display; duplicate sections as needed -->
@@ -974,84 +978,98 @@
                                             <a href="#" class="typo-label-m">See all</a>
                                         </div>
                                         <div class="grid">
-                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                          <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
                                         </div>
                                     </section>
- <section class="mb-4">
+                                    <section class="mb-4">
                                         <div class="d-flex align-items-baseline justify-content-between mb-2">
                                             <div class="typo-body-2">Image 2</div>
                                             <a href="#" class="typo-label-m">See all</a>
                                         </div>
                                         <div class="grid">
-                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                          <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
                                         </div>
                                     </section>
-                                     <section class="mb-4">
+                                    <section class="mb-4">
                                         <div class="d-flex align-items-baseline justify-content-between mb-2">
                                             <div class="typo-body-2">Image 3</div>
                                             <a href="#" class="typo-label-m">See all</a>
                                         </div>
                                         <div class="grid">
-                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                          <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
                                         </div>
                                     </section>
-                                     <section class="mb-4">
+                                    <section class="mb-4">
                                         <div class="d-flex align-items-baseline justify-content-between mb-2">
                                             <div class="typo-body-2">Image 4</div>
                                             <a href="#" class="typo-label-m">See all</a>
                                         </div>
                                         <div class="grid">
-                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                          <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
-                                                 <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg" >
+                                            <button type="button" class="thumb"><img src="/assets/img/img-demo.jpg">
                                                 </svg></button>
                                         </div>
                                     </section>
                                     <!-- copy more sections for “Image 2/3/4” if you want -->
                                 </div>
 
+<div id="imageLibrary" class="image-lib mt-3">
+  <div class="lib-section">
+    <div class="lib-title fw-medium">Currently applied</div>
+    <div class="lib-grid js-uploaded"></div>
+  </div>
 
+</div>
+
+<!-- card template -->
+<template id="image-card-tpl">
+  <div class="img-card" data-upload-id="__UPLOAD_ID__" data-canvas-id="__CANVAS_ID__">
+    <div class="img-thumb"></div>
+      <span class=" js-select img-edit-action typo-caption-m " role="button">Select</span>
+  </div>
+</template>
 
                             </div>
                         </div>
@@ -1174,7 +1192,7 @@
                             </div>
                         </div>
                     </div>
-            <!-- Extension -->
+                    <!-- Extension -->
                     <div class="tab-pane fade p-3 " id="pane-extension" role="tabpanel">
                         <div class="accordion" id="plateAccordion">
                             <div class="accordion-header p-m">
@@ -1208,37 +1226,37 @@
                                                 adipiscing blandit.
                                             </p>
 
-                                <btn class="btn btn-primary w-100 mb-2">Save</btn>
-                                <div class="row g-4 pet-grid">
-  <!-- repeat this .col for as many items as you need -->
-  <div class="col-12 col-sm-6">
-    <article class="pet-card">
-      <div class="pet-card__media">
-        <img src="/assets/img/logo.svg" alt="Brand logo">
-      </div>
+                                            <btn class="btn btn-primary w-100 mb-2">Save</btn>
+                                            <div class="row g-4 pet-grid">
+                                                <!-- repeat this .col for as many items as you need -->
+                                                <div class="col-12 col-sm-6">
+                                                    <article class="pet-card">
+                                                        <div class="pet-card__media">
+                                                            <img src="/assets/img/logo.svg" alt="Brand logo">
+                                                        </div>
 
-      <div class="pet-card__body">
-        <h3 class="pet-card__title typo-body-2">Title </h3>
-        <div class="pet-card__price typo-title-3">+ 3.00 €</div>
-      </div>
-    </article>
-  </div>
+                                                        <div class="pet-card__body">
+                                                            <h3 class="pet-card__title typo-body-2">Title </h3>
+                                                            <div class="pet-card__price typo-title-3">+ 3.00 €</div>
+                                                        </div>
+                                                    </article>
+                                                </div>
 
-  <!-- duplicate cols -->
-  <div class="col-12 col-sm-6">
-    <article class="pet-card">
-      <div class="pet-card__media">
-        <img src="/assets/img/logo.svg" alt="Brand logo">
-      </div>
-      <div class="pet-card__body">
-        <h3 class="pet-card__title typo-body-2">Title</h3>
-        <div class="pet-card__price typo-title-3">+ 3.00 €</div>
-      </div>
-    </article>
-  </div>
+                                                <!-- duplicate cols -->
+                                                <div class="col-12 col-sm-6">
+                                                    <article class="pet-card">
+                                                        <div class="pet-card__media">
+                                                            <img src="/assets/img/logo.svg" alt="Brand logo">
+                                                        </div>
+                                                        <div class="pet-card__body">
+                                                            <h3 class="pet-card__title typo-body-2">Title</h3>
+                                                            <div class="pet-card__price typo-title-3">+ 3.00 €</div>
+                                                        </div>
+                                                    </article>
+                                                </div>
 
-  <!-- …add more items… -->
-</div>
+                                                <!-- …add more items… -->
+                                            </div>
 
                                         </div>
                                     </div>
@@ -1254,9 +1272,49 @@
             <!-- RIGHT WORKSPACE -->
             <section class="col-12 col-md-8 col-lg-9 app-right">
                 <div class="workspace h-100">
-                    <div id="workCanvasContainer" class="js-work-canvas">
-                        <canvas id="workCanvas" width="800" height="600"></canvas>
+                    <div class="canvas-header-actions d-flex justify-content-between align-items-center">
+                        <div class="material-select" id="materialSelect">
+                            <div class="ms-option current p-xs" aria-haspopup="listbox" aria-expanded="false">
+                            </div>
+                            <ul class="ms-list" role="listbox" hidden></ul>
+                        </div>
+                        <div class="actions-container">
+
+                        </div>
                     </div>
+                    <div id="workCanvasContainer" class="js-work-canvas work-canvas-container">
+                        <div class="canvas-outer">
+                            <div class="canvas-inner">
+                                <canvas id="workCanvas" width="600" height="600"></canvas>
+                                                        <div id="canvasOverlay" class="canvas-overlay"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- floating mini-actions template (can live anywhere in the page, e.g. end of body) -->
+                    <template id="object-toolbar-tpl">
+                        <div class="object-toolbar">
+                            <button type="button" class="btn btn-xs btn-dup" title="Duplicate"
+                                aria-label="Duplicate"><svg class="icon" aria-hidden="true">
+                                    <use href="#i-duplicate" />
+                                </svg> </button>
+                            <button type="button" class="btn btn-xs btn-mirror" title="Mirror" aria-label="Mirror"><svg
+                                    class="icon" aria-hidden="true">
+                                    <use href="#i-mirror" />
+                                </svg> </button>
+                            <button type="button" class="btn btn-xs btn-save" title="Save" aria-label="Save"><svg
+                                    class="icon" aria-hidden="true">
+                                    <use href="#i-check" />
+                                </svg> </button>
+                            <button type="button" class="btn btn-xs btn-trash" title="Delete" aria-label="Delete"> <svg
+                                    class="icon" aria-hidden="true">
+                                    <use href="#i-text-delete" />
+                                </svg> </button>
+                        </div>
+                    </template>
+
+
                 </div>
             </section>
         </div>
@@ -1389,16 +1447,38 @@
         </defs>
     </symbol>
     <symbol id="i-file-upload" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M20.3333 15.332V19.4987C20.3333 19.7197 20.2455 19.9317 20.0893 20.0879C19.933 20.2442 19.721 20.332 19.5 20.332H4.5C4.27899 20.332 4.06702 20.2442 3.91074 20.0879C3.75446 19.9317 3.66667 19.7197 3.66667 19.4987V15.332H2V19.4987C2 20.1617 2.26339 20.7976 2.73223 21.2665C3.20107 21.7353 3.83696 21.9987 4.5 21.9987H19.5C20.163 21.9987 20.7989 21.7353 21.2678 21.2665C21.7366 20.7976 22 20.1617 22 19.4987V15.332H20.3333Z"
-                fill="#495056" />
-            <path
-                d="M11.9722 2.00001C11.644 1.9991 11.3189 2.06297 11.0154 2.18796C10.712 2.31294 10.4362 2.49657 10.2038 2.72834L6.93799 5.99418L8.11632 7.17251L11.1447 4.14501L11.1663 17.8333H12.833L12.8113 4.15668L15.8272 7.17251L17.0055 5.99418L13.7397 2.72834C13.5075 2.4966 13.2318 2.31297 12.9285 2.18799C12.6252 2.063 12.3002 1.99912 11.9722 2.00001Z"
-                fill="#495056" />
+        <path
+            d="M20.3333 15.332V19.4987C20.3333 19.7197 20.2455 19.9317 20.0893 20.0879C19.933 20.2442 19.721 20.332 19.5 20.332H4.5C4.27899 20.332 4.06702 20.2442 3.91074 20.0879C3.75446 19.9317 3.66667 19.7197 3.66667 19.4987V15.332H2V19.4987C2 20.1617 2.26339 20.7976 2.73223 21.2665C3.20107 21.7353 3.83696 21.9987 4.5 21.9987H19.5C20.163 21.9987 20.7989 21.7353 21.2678 21.2665C21.7366 20.7976 22 20.1617 22 19.4987V15.332H20.3333Z"
+            fill="#495056" />
+        <path
+            d="M11.9722 2.00001C11.644 1.9991 11.3189 2.06297 11.0154 2.18796C10.712 2.31294 10.4362 2.49657 10.2038 2.72834L6.93799 5.99418L8.11632 7.17251L11.1447 4.14501L11.1663 17.8333H12.833L12.8113 4.15668L15.8272 7.17251L17.0055 5.99418L13.7397 2.72834C13.5075 2.4966 13.2318 2.31297 12.9285 2.18799C12.6252 2.063 12.3002 1.99912 11.9722 2.00001Z"
+            fill="#495056" />
 
     </symbol>
-        <symbol id="i-search" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M22 20.8232L16.7886 15.6119C18.1423 13.9562 18.8079 11.8436 18.6477 9.71102C18.4874 7.57843 17.5137 5.589 15.9278 4.15423C14.3418 2.71947 12.2651 1.94915 10.1272 2.00261C7.98926 2.05606 5.95365 2.9292 4.44143 4.44143C2.9292 5.95365 2.05606 7.98926 2.00261 10.1272C1.94915 12.2651 2.71947 14.3418 4.15423 15.9278C5.589 17.5137 7.57843 18.4874 9.71102 18.6477C11.8436 18.8079 13.9562 18.1423 15.6119 16.7886L20.8232 22L22 20.8232ZM10.3489 17.0067C9.03209 17.0067 7.74487 16.6162 6.65 15.8846C5.55514 15.1531 4.70179 14.1132 4.19788 12.8967C3.69397 11.6801 3.56212 10.3415 3.81901 9.05C4.0759 7.75852 4.71 6.57221 5.64111 5.64111C6.57221 4.71 7.75852 4.0759 9.05 3.81901C10.3415 3.56212 11.6801 3.69397 12.8967 4.19788C14.1132 4.70179 15.1531 5.55514 15.8846 6.65C16.6162 7.74487 17.0067 9.03209 17.0067 10.3489C17.0047 12.114 16.3026 13.8063 15.0544 15.0544C13.8063 16.3026 12.114 17.0047 10.3489 17.0067Z" fill="#495056"/>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M22 20.8232L16.7886 15.6119C18.1423 13.9562 18.8079 11.8436 18.6477 9.71102C18.4874 7.57843 17.5137 5.589 15.9278 4.15423C14.3418 2.71947 12.2651 1.94915 10.1272 2.00261C7.98926 2.05606 5.95365 2.9292 4.44143 4.44143C2.9292 5.95365 2.05606 7.98926 2.00261 10.1272C1.94915 12.2651 2.71947 14.3418 4.15423 15.9278C5.589 17.5137 7.57843 18.4874 9.71102 18.6477C11.8436 18.8079 13.9562 18.1423 15.6119 16.7886L20.8232 22L22 20.8232ZM10.3489 17.0067C9.03209 17.0067 7.74487 16.6162 6.65 15.8846C5.55514 15.1531 4.70179 14.1132 4.19788 12.8967C3.69397 11.6801 3.56212 10.3415 3.81901 9.05C4.0759 7.75852 4.71 6.57221 5.64111 5.64111C6.57221 4.71 7.75852 4.0759 9.05 3.81901C10.3415 3.56212 11.6801 3.69397 12.8967 4.19788C14.1132 4.70179 15.1531 5.55514 15.8846 6.65C16.6162 7.74487 17.0067 9.03209 17.0067 10.3489C17.0047 12.114 16.3026 13.8063 15.0544 15.0544C13.8063 16.3026 12.114 17.0047 10.3489 17.0067Z"
+            fill="#495056" />
+
+    </symbol>
+    <symbol id="i-duplicate" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M20.6667 5.45417L17.3217 2H10.6667C10.0036 2 9.36774 2.26339 8.8989 2.73223C8.43006 3.20107 8.16667 3.83696 8.16667 4.5V5.33333H6.5C5.83696 5.33333 5.20107 5.59673 4.73223 6.06557C4.26339 6.53441 4 7.17029 4 7.83333V22H17.3333V17.8333H20.6667V5.45417ZM15.6667 20.3333H5.66667V7.83333C5.66667 7.61232 5.75446 7.40036 5.91074 7.24408C6.06702 7.0878 6.27899 7 6.5 7H8.16667V17.8333H15.6667V20.3333ZM9.83333 16.1667V4.5C9.83333 4.27899 9.92113 4.06702 10.0774 3.91074C10.2337 3.75446 10.4457 3.66667 10.6667 3.66667H15.6667V7H19V16.1667H9.83333Z"
+            fill="#495056" />
+    </symbol>
+    <symbol id="i-mirror" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M10.4325 2.02052H10.4267C10.2397 1.97827 10.0438 2.00168 9.872 2.08682C9.7002 2.17196 9.56295 2.31363 9.4833 2.48804L2.22434 18.4594C2.051 18.8409 1.97615 19.2598 2.00664 19.6777C2.03712 20.0956 2.17197 20.4992 2.39882 20.8514C2.62568 21.2037 2.9373 21.4935 3.30514 21.6941C3.67298 21.8948 4.08528 22 4.50429 22H10.2597C10.4811 22 10.6935 21.912 10.85 21.7555C11.0066 21.5989 11.0945 21.3866 11.0945 21.1652V2.837C11.093 2.64605 11.0266 2.4613 10.9063 2.31298C10.7861 2.16465 10.619 2.06154 10.4325 2.02052ZM9.42486 20.3303H4.50429C4.36454 20.3304 4.227 20.2954 4.10427 20.2286C3.98155 20.1617 3.87758 20.0651 3.80189 19.9476C3.7262 19.8301 3.68121 19.6955 3.67105 19.5561C3.6609 19.4168 3.68589 19.2771 3.74375 19.1498L9.42486 6.65224V20.3303Z"
+            fill="#495056" />
+        <path
+            d="M21.6344 18.4601L14.3754 2.48867C14.292 2.31327 14.1512 2.17158 13.9763 2.08703C13.8014 2.00248 13.603 1.98013 13.4137 2.02367C13.2292 2.06567 13.0645 2.16908 12.9464 2.31697C12.8284 2.46486 12.7642 2.64844 12.7642 2.83764V21.1658C12.7642 21.3872 12.8521 21.5996 13.0087 21.7561C13.1652 21.9127 13.3776 22.0006 13.599 22.0006H19.3544C19.7734 22.0006 20.1857 21.8954 20.5536 21.6948C20.9214 21.4941 21.233 21.2044 21.4599 20.8521C21.6867 20.4998 21.8216 20.0962 21.8521 19.6783C21.8826 19.2604 21.8077 18.8415 21.6344 18.4601Z"
+            fill="#495056" />
+
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M7.79994 20.5301C7.40606 20.5308 7.01593 20.4537 6.65194 20.3032C6.28795 20.1527 5.95728 19.9318 5.67894 19.6531L0.0859375 14.0611L1.49994 12.6461L7.09294 18.2391C7.28047 18.4266 7.53477 18.5319 7.79994 18.5319C8.0651 18.5319 8.31941 18.4266 8.50694 18.2391L22.4999 4.24609L23.9139 5.66009L9.92094 19.6531C9.64259 19.9318 9.31192 20.1527 8.94794 20.3032C8.58395 20.4537 8.19381 20.5308 7.79994 20.5301Z"
+            fill="#27AB86" />
 
     </symbol>
 </svg>

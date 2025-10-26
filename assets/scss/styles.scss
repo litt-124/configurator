@@ -32,13 +32,14 @@ $spacers: (
   4: #{$space-6}px,
   5: #{$space-8}px
 );
+@import "forms";
 @import "bootstrap/scss/bootstrap";
 @import "buttons";
 @import "forms";
 @import "text-helper";
 @import "images";
 @import "extensions";
-
+@import "background";
 html,
 body {
   height: 100vh;
@@ -227,4 +228,88 @@ flex-shrink: 0;
 
 .media-grid{
   margin-top: 16px;
+}
+
+
+.work-canvas-container{
+  width: 100%;
+  height: 100%;
+}
+.canvas-header-actions{
+  border-bottom: 1px solid $border-1;
+  height: 60px;
+background-color: $bg-1;
+padding: 0 var(--space-2);
+}
+
+.canvas-container{
+  margin: auto;
+}
+#workCanvas {
+  display: block;
+  margin: auto;
+}
+/* make the outer always centered in page */
+#workCanvasContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* outer = framed area with background image */
+.canvas-outer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/assets/img/bg-fabric.jpg'); /* 💡 your image here */
+  background-size: cover;        /* can be changed via JS */
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+/* inner = padding area + solid background */
+.canvas-inner {
+  position: relative;
+  padding: 30px;                /* adjust border thickness */
+  border-radius: 10px;
+}
+
+/* overlay covers the canvas area */
+.canvas-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;   /* clicks pass through by default */
+  z-index: 5;             /* above canvas; adjust if needed */
+    top: 30px;      /* ← equal to your inner padding */
+  left: 30px;     /* ← equal to your inner padding */
+  right: 30px;
+  bottom: 30px;
+}
+
+/* toolbar look & feel */
+.object-toolbar {
+  position: absolute;
+  pointer-events: auto;   /* toolbar itself should be clickable */
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background: $bg-1;
+  backdrop-filter: blur(2px);
+  border: 1px solid $gray-300;
+  transform: translate(-50%, -100%); /* anchor at center-bottom */
+}
+
+.object-toolbar .btn {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  padding: 4px 6px;
+  cursor: pointer;
 }

@@ -1,0 +1,24 @@
+.material-select { position: relative; width: 260px;}
+
+.ms-option {
+  display: flex; align-items: center; gap: var(--space-2);
+  cursor: pointer; 
+  transition: background .15s;
+}
+.ms-option:hover { background:$bg-3; }
+.ms-option[aria-selected="true"] { background: $bg-2; }
+
+.ms-thumb {
+  width: 24px; height: 24px; flex: 0 0 24px; border-radius: 4px;
+  opacity: 0.6;
+  background-size: cover; background-position: center; border: 1px solid $border-1;
+}
+.ms-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+
+.ms-list {
+  position: absolute; top: calc(100% + 8px); left: 8px; right: 0;
+  background: $bg-1; border-radius: var(--space-2); padding: var(--space-2) 0;
+box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);
+  max-height: 60vh; overflow: auto; z-index: 30;
+}
