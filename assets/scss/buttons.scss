@@ -94,3 +94,9 @@
     --bs-btn-bg: #{$bg-2};
 
 }
+
+.btn-close{
+  &:focus{
+    box-shadow: none;
+  }
+}

@@ -1,319 +1,431 @@
-// ./panels/text.js
 import {
-  initCanvas, getCanvas,
-  addTextObject, updateTextObject, removeObject, selectObject, setTextAlign, setFontSize
+  initCanvas,
+  getCanvas,
+  addTextObject,
+  updateTextObject,
+  removeObject,
+  selectObject,
+  setFontSize,
+  setFontFamilyForActive,
 } from '../canvas.js';
 
 import {
-  ensureFontLoaded,
-  setFontFamilyForActive
-  // NOTE: no need for setDefaultFontFamily for per-card behavior
-} from '../canvas.js';
+  writeStepData,
+  showAlert,
+} from '../utils.js';
 
-const FONTS = {
+const PANE_ID      = 'pane-text';
+const NEXT_PANE_ID = 'pane-image';
+
+export const FONTS = {
   aero:  { family: 'Aero',  url: '/assets/fonts/Aero.woff2', label: 'Aero' },
-  arial: { family: 'Arial', url: null,                        label: 'Sans' },
+  arial: { family: 'Arial', url: null,                        label: 'Arial' },
 };
+
+const SELECTORS = {
+  addButton:        '.js-add-text',
+  list:             '.js-text-list',
+  template:         '#text-card-tpl',
+  saveButton:       '.js-save-button',
+
+  card:             '.js-text-card',
+  cardIndex:        '.js-text-card-index',
+
+  simpleSection:    '.js-text-simple',
+  simpleInput:      '.js-text-simple-input',
+  advancedSection:  '.js-text-advanced',
+  advancedInput:    '.js-text-advanced-input',
+
+  advancedToolbar:  '.js-text-advanced-toolbar',
+
+  fontPicker:       '.js-text-font-picker',
+  fontLabel:        '.js-text-font-label',
+
+  sizeStepper:      '.js-text-size-stepper',
+  sizeInput:        '.js-text-size-input',
+  sizeBtn:          '.js-text-size-btn',
+
+  editBtn:          '.js-text-edit',
+  exitEditBtn:      '.js-text-exit-edit',
+  deleteBtn:        '.js-text-delete',
+};
+
+function getFontKey(fontFamily) {
+  const ff = (fontFamily || '').toLowerCase();
+  if (ff.includes('arial')) return 'arial';
+  return 'aero';
+}
+
+/* ---------------------- template & helpers ---------------------- */
+
+function cloneCardTemplate(tplEl) {
+  const html = tplEl.textContent.trim();
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  return wrap.firstElementChild;
+}
+
+function renumberCards(list) {
+  const cards = list.querySelectorAll(SELECTORS.card);
+  cards.forEach((card, idx) => {
+    const idxEl = card.querySelector(SELECTORS.cardIndex);
+    if (idxEl) {
+      idxEl.textContent = String(idx + 1);
+    }
+  });
+}
+
+function initCardFontPicker(card, canvasId) {
+  const picker  = card.querySelector(SELECTORS.fontPicker);
+  const labelEl = card.querySelector(SELECTORS.fontLabel);
+  if (!picker || !labelEl) return;
+
+  picker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.dropdown-item');
+    if (!btn) return;
+
+    const key  = btn.dataset.font; // 'aero' or 'arial'
+    const meta = FONTS[key];
+    if (!meta) return;
+
+    // Apply font to active object on this canvas
+    selectObject(canvasId);
+    setFontFamilyForActive(meta.family);
+
+    // Update label
+    labelEl.textContent = meta.label;
+  });
+}
+
+function wireCard(card, canvasId, initialText, initialFontSize, initialFontFamily) {
+  card.dataset.canvasId = canvasId;
+
+  const simpleInput = card.querySelector(SELECTORS.simpleInput);
+  const advInput    = card.querySelector(SELECTORS.advancedInput);
+  const sizeInput   = card.querySelector(SELECTORS.sizeInput);
+  const fontLabel   = card.querySelector(SELECTORS.fontLabel);
+
+  // Initial values
+  if (simpleInput) simpleInput.value = initialText || '';
+  if (advInput)    advInput.value    = initialText || '';
+
+  if (sizeInput && typeof initialFontSize === 'number') {
+    sizeInput.value = String(Math.round(initialFontSize));
+  }
+
+  if (fontLabel) {
+    const meta = FONTS[getFontKey(initialFontFamily)];
+    fontLabel.textContent = meta?.label || 'Aero';
+  }
+
+  // Simple input bindings
+  if (simpleInput) {
+    simpleInput.addEventListener('input', (e) => {
+      updateTextObject(canvasId, e.target.value);
+      if (advInput && document.activeElement !== advInput) {
+        advInput.value = e.target.value;
+      }
+    });
+    simpleInput.addEventListener('focus', () => selectObject(canvasId));
+  }
+
+  // Advanced input bindings
+  if (advInput) {
+    advInput.addEventListener('input', (e) => {
+      updateTextObject(canvasId, e.target.value);
+      if (simpleInput && document.activeElement !== simpleInput) {
+        simpleInput.value = e.target.value;
+      }
+    });
+    advInput.addEventListener('focus', () => selectObject(canvasId));
+  }
+
+  // Per-card font picker
+  initCardFontPicker(card, canvasId);
+}
+
+function createCardForObject(obj, tplEl, list) {
+  const card = cloneCardTemplate(tplEl);
+  if (!card) return null;
+
+  wireCard(
+      card,
+      obj.emoId,
+      obj.text || '',
+      typeof obj.fontSize === 'number' ? obj.fontSize : 10,
+      obj.fontFamily || '',
+  );
+
+  list.appendChild(card);
+  renumberCards(list);
+  return card;
+}
+
+/* ---------------------- main entry ---------------------- */
 
 export default function onTextTab(pane) {
   if (pane.dataset.inited === '1') return;
   pane.dataset.inited = '1';
 
-  // ensure there is a canvas
+  // ensure canvas exists
   initCanvas();
+  const canvas = getCanvas();
 
-  // ── 0) PRELOAD AERO ONCE (no global default switching) ────────────────
-  ensureFontLoaded(FONTS.aero.family, FONTS.aero.url).catch(() => { /* ignore */ });
+  const addBtn  = pane.querySelector(SELECTORS.addButton);
+  const list    = pane.querySelector(SELECTORS.list);
+  const tplEl   = pane.querySelector(SELECTORS.template);
+  const saveBtn = pane.querySelector(SELECTORS.saveButton);
 
-  // 🔄 sync FROM canvas selection -> focus matching card input in THIS pane
-  const c = getCanvas();
+  if (!addBtn || !list || !tplEl) return;
+
+  /* ---------- sync UI from canvas selection ---------- */
+
   const syncFromCanvas = () => {
-    const active = c.getActiveObject();
+    const active = canvas.getActiveObject();
     if (!active || !active.emoId) return;
 
-    const card = pane.querySelector(`.js-text-card[data-canvas-id="${active.emoId}"]`);
+    const card = pane.querySelector(
+        `${SELECTORS.card}[data-canvas-id="${active.emoId}"]`,
+    );
     if (!card) return;
 
-    // focus the correct input
-    const input = card.classList.contains('is-editing')
-      ? card.querySelector('.text-card__advanced input.form-control')
-      : card.querySelector('.text-card__simple  input.form-control');
-    input?.focus();
+    const isEditing = card.classList.contains('is-editing');
+    const targetInput = isEditing
+        ? card.querySelector(SELECTORS.advancedInput)
+        : card.querySelector(SELECTORS.simpleInput);
 
-    // reflect size
-    const sizeInput = card.querySelector('.size-stepper input');
+    targetInput?.focus();
+
+    const sizeInput = card.querySelector(SELECTORS.sizeInput);
     if (sizeInput && typeof active.fontSize === 'number') {
       sizeInput.value = String(Math.round(active.fontSize));
     }
 
-    // reflect font in THIS CARD’s label
-    const pickerLabel = card.querySelector('.font-picker .current-font');
+    const pickerLabel = card.querySelector(SELECTORS.fontLabel);
     if (pickerLabel) {
-      const fam = (active.fontFamily || '').toLowerCase();
-      const key = fam.includes('aero') ? 'aero' : (fam.includes('arial') ? 'arial' : null);
-      pickerLabel.textContent = (key && FONTS[key]) ? FONTS[key].label : (active.fontFamily || '');
+      const meta = FONTS[getFontKey(active.fontFamily)];
+      pickerLabel.textContent = meta?.label || 'Aero';
     }
   };
-  c.on('selection:created', syncFromCanvas);
-  c.on('selection:updated',  syncFromCanvas);
 
-  // hooks inside this pane only
-  const addBtn = pane.querySelector('.js-add-text');
-  const list   = pane.querySelector('.js-text-list');
-  const tplEl  = pane.querySelector('#text-card-tpl');
-  if (!addBtn || !list || !tplEl) return;
+  canvas.on('selection:created', syncFromCanvas);
+  canvas.on('selection:updated',  syncFromCanvas);
+  canvas.on('object:modified',    syncFromCanvas);
 
-  let counter = 0;
-window.addEventListener('emo:removed', (e) => {
-  const id = e.detail?.id;
-  if (!id) return;
-  const card = pane.querySelector(`.js-text-card[data-canvas-id="${id}"]`);
-  card?.remove();
-});
+  /* ---------- Save step button ---------- */
 
-// duplicate (toolbar created a new canvas object; add matching card)
-window.addEventListener('emo:added', (e) => {
-  const id = e.detail?.id;
-  if (!id) return;
-  const c = getCanvas();
-  const obj = c?.getObjects().find(o => o.emoId === id);
-  if (!obj) return;
+  if (saveBtn) {
+    saveBtn.type = 'button';
+    saveBtn.addEventListener('click', (e) => {
+      e.preventDefault();
 
-  const newCard = createCardForExistingObject(obj, tplEl);
-  list.appendChild(newCard);
-  newCard.querySelector('input.form-control')?.focus();
-});
+      const c = getCanvas();
+      const texts = c.getObjects().filter(
+          (o) => o.emoKind === 'text' && o.emoId,
+      );
 
-// save (toolbar wants to exit edit mode on the matching card)
-window.addEventListener('emo:save', (e) => {
-  const id = e.detail?.id;
-  if (!id) return;
-  const card = pane.querySelector(`.js-text-card[data-canvas-id="${id}"]`);
-  if (!card) return;
+      const items = texts.map((o) => ({
+        id:         o.emoId,
+        text:       o.text || '',
+        fontSize:   typeof o.fontSize === 'number' ? o.fontSize : 10,
+        fontFamily: o.fontFamily || '',
+        left:       o.left,
+        top:        o.top,
+        angle:      typeof o.angle === 'number' ? o.angle : 0,
+        align:      o.textAlign || 'left',
+        flipX:      !!o.flipX,
+        flipY:      !!o.flipY,
+      }));
 
-  card.classList.remove('is-editing');
-  card.querySelectorAll('input.form-control').forEach(inp => inp.blur());
-   const c = getCanvas();
- if (c?.getActiveObject?.()) {
-   c.discardActiveObject();
-   c.requestRenderAll();
- }
-});
-  const initCardFontPicker = (card, canvasId) => {
-    const picker = card.querySelector('.font-picker');
-    if (!picker) return;
+      const data = { items };
 
-    // init label → Aero
-    const labelEl = picker.querySelector('.current-font');
-    if (labelEl) labelEl.textContent = FONTS.aero.label;
+      writeStepData(PANE_ID, data);
+      showAlert('success');
 
-    // click handler (per card)
-    picker.addEventListener('click', async (e) => {
-      const btn = e.target.closest('.dropdown-item');
-      if (!btn) return;
-
-      const key  = btn.dataset.font; // 'aero' | 'arial'
-      const meta = FONTS[key];
-      if (!meta) return;
-
-      // make sure font is ready
-      await ensureFontLoaded(meta.family, meta.url);
-
-      // apply to THIS card’s object
-      selectObject(canvasId);
-      setFontFamilyForActive(meta.family);
-
-      // update this card's label
-      if (labelEl) labelEl.textContent = btn.dataset.label || meta.label || meta.family;
+      const ev = new CustomEvent('configurator:step-complete', {
+        detail: { stepId: PANE_ID, nextStepId: NEXT_PANE_ID, data },
+      });
+      document.dispatchEvent(ev);
     });
-  };
-function createCardForExistingObject(obj, tplEl) {
-  const list = tplEl.closest('.js-text-pane')?.querySelector('.js-text-list') 
-             || document.querySelector('.js-text-list'); // or pass `list` in as param if you prefer
-  const nextIndex = (list?.querySelectorAll('.js-text-card').length || 0) + 1;
-  const html = tplEl.textContent.trim().replaceAll('__N__', String(nextIndex));
-      const wrap = document.createElement('div');
-
-  wrap.innerHTML = html;
-  const card = wrap.firstElementChild;
-
-  card.dataset.canvasId = obj.emoId;
-
-  const simpleInput = card.querySelector('.text-card__simple input.form-control');
-  const advInput    = card.querySelector('.text-card__advanced input.form-control');
-  const sizeInput   = card.querySelector('.size-stepper input');
-
-  if (simpleInput) simpleInput.value = obj.text || '';
-  if (advInput)    advInput.value    = obj.text || '';
-  if (sizeInput && typeof obj.fontSize === 'number') {
-    sizeInput.value = String(Math.round(obj.fontSize));
   }
 
-  // font label for this card
-  const pickerLabel = card.querySelector('.font-picker .current-font');
-  if (pickerLabel) {
-    const fam = (obj.fontFamily || '').toLowerCase();
-    pickerLabel.textContent =
-      fam.includes('aero') ? FONTS.aero.label :
-      fam.includes('arial') ? FONTS.arial.label :
-      (obj.fontFamily || '');
-  }
+  /* ---------- Global emo events ---------- */
 
-  // inputs like in makeCard()
-  if (simpleInput) {
-    simpleInput.addEventListener('input', (e) => {
-      updateTextObject(obj.emoId, e.target.value);
-      if (advInput && document.activeElement !== advInput) advInput.value = e.target.value;
-    });
-    simpleInput.addEventListener('focus', () => selectObject(obj.emoId));
-  }
-  if (advInput) {
-    advInput.addEventListener('input', (e) => {
-      updateTextObject(obj.emoId, e.target.value);
-      if (simpleInput && document.activeElement !== simpleInput) simpleInput.value = e.target.value;
-    });
-    advInput.addEventListener('focus', () => selectObject(obj.emoId));
-  }
+  window.addEventListener('emo:removed', (e) => {
+    const id = e.detail?.id;
+    if (!id) return;
+    const card = pane.querySelector(
+        `${SELECTORS.card}[data-canvas-id="${id}"]`,
+    );
+    if (card) {
+      card.remove();
+      renumberCards(list);
+    }
+  });
 
-  // per-card font picker
-  initCardFontPicker(card, obj.emoId);
+  window.addEventListener('emo:added', (e) => {
+    const id = e.detail?.id;
+    if (!id) return;
 
-  return card;
-}
+    const c = getCanvas();
+    const obj = c?.getObjects().find((o) => o.emoId === id);
+    if (!obj) return;
 
-  const makeCard = () => {
-    const nextIndex = list.querySelectorAll('.js-text-card').length + 1; // 1-based
-    const html = tplEl.textContent.trim().replaceAll('__N__', String(nextIndex));
-    const wrap = document.createElement('div');
-    wrap.innerHTML = html;
-    const card = wrap.firstElementChild;
+    const existingCard = pane.querySelector(
+        `${SELECTORS.card}[data-canvas-id="${id}"]`,
+    );
+    if (existingCard) return;
+
+    const card = createCardForObject(obj, tplEl, list);
+    card?.querySelector(SELECTORS.simpleInput)?.focus();
+  });
+
+  window.addEventListener('emo:save', (e) => {
+    const id = e.detail?.id;
+    if (!id) return;
+
+    const card = pane.querySelector(
+        `${SELECTORS.card}[data-canvas-id="${id}"]`,
+    );
+    if (!card) return;
+
+    card.classList.remove('is-editing');
+
+    card.querySelectorAll('input').forEach((inp) => inp.blur());
+    const c = getCanvas();
+    if (c?.getActiveObject?.()) {
+      c.discardActiveObject();
+      c.requestRenderAll();
+    }
+  });
+
+  /* ---------- Add new card manually ---------- */
+
+  const makeNewCard = () => {
     const defaultSize = 10;
-
-    // create a canvas text object and link it to the card
     const canvasId = addTextObject({ text: '', fontSize: defaultSize });
-    card.dataset.canvasId = canvasId;
 
-    // force initial font to Aero on the freshly created object (per-card)
-    // (selection ensures setFontFamilyForActive applies to the right one)
     selectObject(canvasId);
     setFontFamilyForActive(FONTS.aero.family);
 
-    // init this card's font picker
-    initCardFontPicker(card, canvasId);
+    const card = cloneCardTemplate(tplEl);
+    if (!card) return null;
 
-    const simpleInput = card.querySelector('.text-card__simple input.form-control');
-    const advInput    = card.querySelector('.text-card__advanced input.form-control');
+    wireCard(
+        card,
+        canvasId,
+        '',
+        defaultSize,
+        FONTS.aero.family,
+    );
 
-    if (simpleInput) {
-      simpleInput.addEventListener('input', (e) => {
-        updateTextObject(canvasId, e.target.value);
-        if (advInput && document.activeElement !== advInput) advInput.value = e.target.value;
-      });
-      simpleInput.addEventListener('focus', () => selectObject(canvasId));
-    }
-
-    if (advInput) {
-      advInput.addEventListener('input', (e) => {
-        updateTextObject(canvasId, e.target.value);
-        if (simpleInput && document.activeElement !== simpleInput) simpleInput.value = e.target.value;
-      });
-      advInput.addEventListener('focus', () => selectObject(canvasId));
-    }
-
+    list.appendChild(card);
+    renumberCards(list);
     return card;
   };
 
   addBtn.addEventListener('click', () => {
-    const card = makeCard();
-    list.appendChild(card);
-    card.querySelector('input.form-control')?.focus();
-  }, { once: false });
+    const card = makeNewCard();
+    card?.querySelector(SELECTORS.simpleInput)?.focus();
+  });
+
+  /* ---------- Card-level events (edit/delete/size) ---------- */
 
   list.addEventListener('click', (e) => {
-    const editBtn = e.target.closest('.js-edit-text');
-    const backBtn = e.target.closest('.js-exit-edit');
-    const delBtn  = e.target.closest('.js-delete-text');
-    const sizeBtn = e.target.closest('.size-stepper .btn');
-
-    const alignBtn = e.target.closest('.align-group .btn');
-    if (alignBtn) {
-      const card = alignBtn.closest('.js-text-card');
-      const id = card?.dataset.canvasId;
-      if (!id) return;
-
-      const align =
-        alignBtn.dataset.align ||
-        (alignBtn.getAttribute('data-align') || '').toLowerCase();
-
-      if (align === 'left' || align === 'center' || align === 'right') {
-        setTextAlign(id, align);
-
-        const group = alignBtn.closest('.align-group');
-        group?.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        alignBtn.classList.add('active');
-      }
-      return;
-    }
+    const editBtn = e.target.closest(SELECTORS.editBtn);
+    const backBtn = e.target.closest(SELECTORS.exitEditBtn);
+    const delBtn  = e.target.closest(SELECTORS.deleteBtn);
+    const sizeBtn = e.target.closest(SELECTORS.sizeBtn);
 
     if (editBtn) {
-      const card = editBtn.closest('.js-text-card');
-      card?.classList.add('is-editing');
-      const id = card?.dataset.canvasId;
-      const simpleVal = card?.querySelector('.text-card__simple input.form-control')?.value || '';
-      const advInput  = card?.querySelector('.text-card__advanced input.form-control');
-      if (advInput) advInput.value = simpleVal;
+      const card = editBtn.closest(SELECTORS.card);
+      if (!card) return;
+
+      card.classList.add('is-editing');
+
+      const id = card.dataset.canvasId;
+      const simpleInput = card.querySelector(SELECTORS.simpleInput);
+      const advInput    = card.querySelector(SELECTORS.advancedInput);
+
+      if (advInput && simpleInput) {
+        advInput.value = simpleInput.value;
+        advInput.focus();
+      }
+
       if (id) selectObject(id);
       return;
     }
+
     if (backBtn) {
-      const card = backBtn.closest('.js-text-card');
-      card?.classList.remove('is-editing');
-      const id = card?.dataset.canvasId;
+      const card = backBtn.closest(SELECTORS.card);
+      if (!card) return;
+
+      card.classList.remove('is-editing');
+      const id = card.dataset.canvasId;
       if (id) selectObject(id);
       return;
     }
+
     if (delBtn) {
-      const card = delBtn.closest('.js-text-card');
-      const id = card?.dataset.canvasId;
+      const card = delBtn.closest(SELECTORS.card);
+      if (!card) return;
+
+      const id = card.dataset.canvasId;
       if (id) removeObject(id);
-      card?.remove();
+      card.remove();
+      renumberCards(list);
+      return;
     }
+
     if (sizeBtn) {
-      const card = sizeBtn.closest('.js-text-card');
-      const id = card?.dataset.canvasId;
+      const card = sizeBtn.closest(SELECTORS.card);
+      if (!card) return;
+
+      const id = card.dataset.canvasId;
       if (!id) return;
 
-      const input = card.querySelector('.size-stepper input');
+      const input = card.querySelector(SELECTORS.sizeInput);
       let val = parseInt(input?.value, 10);
       if (Number.isNaN(val)) val = 10;
 
-      let step = Number(sizeBtn.dataset.step);
-      if (!step) {
-        const href = sizeBtn.querySelector('use')?.getAttribute('href') || '';
-        step = href.includes('plus') ? 1 : -1;
-      }
-
+      const step = Number(sizeBtn.dataset.step) || 0;
       val = Math.min(200, Math.max(6, val + step));
-      if (input) input.value = String(val);
 
+      if (input) input.value = String(val);
       setFontSize(id, val);
     }
   });
 
-  // 2b) typing directly in the size input
   list.addEventListener('input', (e) => {
-    const input = e.target.closest('.size-stepper input');
-    if (!input) return;
+    const sizeInput = e.target.closest(SELECTORS.sizeInput);
+    if (!sizeInput) return;
 
-    const card = input.closest('.js-text-card');
-    const id = card?.dataset.canvasId;
+    const card = sizeInput.closest(SELECTORS.card);
+    if (!card) return;
+
+    const id = card.dataset.canvasId;
     if (!id) return;
 
-    let val = parseInt(input.value, 10);
+    let val = parseInt(sizeInput.value, 10);
     if (Number.isNaN(val)) val = 10;
     val = Math.min(200, Math.max(6, val));
-    input.value = String(val);
+    sizeInput.value = String(val);
 
     setFontSize(id, val);
+  });
+
+  /* ---------- Initial cards from existing canvas objects ---------- */
+
+  const existingTexts = canvas.getObjects().filter(
+      (o) => o.emoKind === 'text' && o.emoId,
+  );
+
+  existingTexts.forEach((obj) => {
+    const already = list.querySelector(
+        `${SELECTORS.card}[data-canvas-id="${obj.emoId}"]`,
+    );
+    if (already) return;
+
+    createCardForObject(obj, tplEl, list);
   });
 }

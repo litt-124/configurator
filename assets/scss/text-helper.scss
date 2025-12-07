@@ -65,7 +65,7 @@
 .select-row {
   background: $bg-3;
   border: 1px solid $border-1;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 12px 14px;
 
   &__label {
@@ -78,6 +78,9 @@
     color: $brand-1;
     text-decoration: underline;
     padding: 0;
+  }
+  &__value{
+    color: $text-3;
   }
 }
 
@@ -162,7 +165,7 @@
   --bs-btn-padding-x: 16px;
   --bs-btn-padding-y: 12px;
   --bs-btn-bg:#{$bg-3};
-  font-family: var(--ff-base);
+  font-family: var(--ff-base), serif;
   font-weight: var(--fw-medium);
   font-size: var(--fs-sm);
   line-height: var(--lh-body);

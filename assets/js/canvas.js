@@ -1,22 +1,294 @@
 // assets/js/canvas.js
 let canvas;
 const objectsById = new Map();
+let canvasMask = null;
 
-// ⬇️ add this
+let bgRect = null;
+let currentBgUrl = null;
+let bgImage = null;
+
+export function getCurrentBgUrl() {
+  return currentBgUrl;
+}
+
+export function setCanvasBgPatternFromUrl(url) {
+  const c = initCanvas();
+
+  // Clear background
+  if (!url) {
+    currentBgUrl = null;
+
+    if (bgImage) {
+      c.remove(bgImage);
+      bgImage = null;
+    }
+    // keep bgRect if you use it for layout; just make it transparent
+    if (bgRect) {
+      bgRect.set({ fill: 'transparent' });
+    }
+
+    c.requestRenderAll();
+    return;
+  }
+
+  currentBgUrl = url;
+
+  fabric.Image.fromURL(
+      url,
+      (img) => {
+        const cw = c.getWidth();
+        const ch = c.getHeight();
+
+        const srcW = img.width || img.getElement()?.naturalWidth || 1;
+        const srcH = img.height || img.getElement()?.naturalHeight || 1;
+
+        // background-size: cover
+        const scale = Math.max(cw / srcW, ch / srcH);
+
+        img.set({
+          left: cw / 2,
+          top:  ch / 2,
+          originX: 'center',
+          originY: 'center',
+          scaleX: scale,
+          scaleY: scale,
+          selectable: false,
+          evented: false,
+        });
+
+        img._isLayout = true; // 👈 so your overlap logic ignores it
+
+        // If we already had a bgImage, replace it
+        if (bgImage) {
+          c.remove(bgImage);
+        }
+        bgImage = img;
+        c.add(bgImage);
+        c.sendToBack(bgImage);
+
+        // Optional: keep bgRect purely as a layout helper
+        if (bgRect) {
+          bgRect.set({
+            width: cw,
+            height: ch,
+            left: 0,
+            top: 0,
+            selectable: false,
+            evented: false,
+            fill: 'transparent',
+          });
+          bgRect._isLayout = true;
+          c.sendToBack(bgRect);
+        }
+
+        c.requestRenderAll();
+      },
+      { crossOrigin: 'anonymous' }
+  );
+}
+
+
+export function resetBackgroundCornerRadius() {
+  if (!canvas || !bgRect) return;
+  bgRect.set({ rx: 0, ry: 0 });
+  bgRect.setCoords();
+  canvas.requestRenderAll();
+}
+export function setCanvasMaskFromSvgUrl(url) {
+  const c = initCanvas();
+
+  return new Promise((resolve, reject) => {
+    if (!url) {
+      reject(new Error('No SVG URL provided for canvas mask'));
+      return;
+    }
+
+    fabric.loadSVGFromURL(url, (objects, options) => {
+      try {
+        if (!objects || !objects.length) {
+          reject(new Error('Mask SVG is empty or invalid'));
+          return;
+        }
+
+        const mask = fabric.util.groupSVGElements(objects, options);
+
+        const cw = c.getWidth();
+        const ch = c.getHeight();
+        const w  = mask.width  || 1;
+        const h  = mask.height || 1;
+        const scale = Math.min(cw / w, ch / h);
+
+        mask.set({
+          originX: 'center',
+          originY: 'center',
+          left: cw / 2,
+          top:  ch / 2,
+          scaleX: scale,
+          scaleY: scale,
+          absolutePositioned: true,
+        });
+
+        mask._kind = 'svg';  // 👈 mark as SVG mask
+
+        canvasMask = mask;
+        c.clipPath = mask;
+        c.requestRenderAll();
+        resolve(mask);
+      } catch (e) {
+        reject(e || new Error('Failed to build mask from SVG'));
+      }
+    });
+  });
+}
+// 🔥 Rounded-rectangle clipPath used for "Rectangle + rounded corners"
+export function setRoundedRectMask(percent) {
+  const c = initCanvas();
+  if (!c) return;
+
+  const cw = c.getWidth();
+  const ch = c.getHeight();
+
+  // clamp 0–100 → 0–1
+  const p = Math.max(0, Math.min(100, Number(percent) || 0)) / 100;
+
+  const maxR = Math.min(cw, ch) / 2;
+  const r    = maxR * p;
+
+  const mask = new fabric.Rect({
+    originX: 'center',
+    originY: 'center',
+    left: cw / 2,
+    top:  ch / 2,
+    width: cw,
+    height: ch,
+    rx: r,
+    ry: r,
+    absolutePositioned: true,
+  });
+
+  mask._kind        = 'roundedRect';
+  mask._roundedPct  = p; // store ratio so we can refit on resize
+
+  canvasMask = mask;
+  c.clipPath = mask;
+  c.requestRenderAll();
+}
+
+export function refitCanvasMaskToCanvas() {
+  const c = canvas;
+  if (!c || !canvasMask) return;
+
+  const cw = c.getWidth();
+  const ch = c.getHeight();
+
+  // Rounded-rect mask (rectangle with rounded corners)
+  if (canvasMask._kind === 'roundedRect') {
+    const p = typeof canvasMask._roundedPct === 'number'
+        ? canvasMask._roundedPct
+        : 1;
+
+    const maxR = Math.min(cw, ch) / 2;
+    const r    = maxR * p;
+
+    canvasMask.set({
+      originX: 'center',
+      originY: 'center',
+      left: cw / 2,
+      top:  ch / 2,
+      width: cw,
+      height: ch,
+      rx: r,
+      ry: r,
+    });
+
+  } else {
+    // Default SVG mask: keep your previous logic
+    const w = canvasMask.width  || 1;
+    const h = canvasMask.height || 1;
+    const scale = Math.min(cw / w, ch / h);
+
+    canvasMask.set({
+      originX: 'center',
+      originY: 'center',
+      left: cw / 2,
+      top:  ch / 2,
+      scaleX: scale,
+      scaleY: scale,
+    });
+  }
+
+  canvasMask.setCoords();
+  c.requestRenderAll();
+}
+
+
+export function clearCanvasMask() {
+  const c = initCanvas();
+  c.clipPath = null;
+  canvasMask = null;
+  c.requestRenderAll();
+}
+
 export function getCanvas() {
   return initCanvas();
 }
+export function refitBgPatternToCanvas() {
+  const c = canvas;
+  if (!c) return;
+
+  const cw = c.getWidth();
+  const ch = c.getHeight();
+
+  // Keep layout rect in sync if you still use it
+  if (bgRect) {
+    bgRect.set({
+      width: cw,
+      height: ch,
+      left: 0,
+      top: 0,
+    });
+    bgRect.setCoords();
+  }
+
+  if (!bgImage) {
+    c.requestRenderAll();
+    return;
+  }
+
+  const srcW = bgImage.width  || bgImage.getElement()?.naturalWidth  || 1;
+  const srcH = bgImage.height || bgImage.getElement()?.naturalHeight || 1;
+
+  const scale = Math.max(cw / srcW, ch / srcH);
+
+  bgImage.set({
+    left: cw / 2,
+    top:  ch / 2,
+    originX: 'center',
+    originY: 'center',
+    scaleX: scale,
+    scaleY: scale,
+  });
+
+  bgImage.setCoords();
+  c.sendToBack(bgImage);
+  c.requestRenderAll();
+}
+
+
+
 export function initCanvas() {
-  if (canvas) return canvas;
+  if (canvas) {
+    return canvas;}
   canvas = new fabric.Canvas('workCanvas', {
     selection: true,
     preserveObjectStacking: true,
   });
-initObjectToolbar();
-attachToolbarFollowEvents();
-  // 🔴 track whether we're pushing against edges during a drag
+  canvas.uniformScaling = true;
+
+  initObjectToolbar();
+  attachToolbarFollowEvents();
   canvas._edgeViolate = false;
-enableStraightGuide(2); // threshold in degrees (tweak if you want)
+  enableStraightGuide(2); // threshold in degrees (tweak if you want)
 
   canvas.on('mouse:down', () => {
     const o = canvas.getActiveObject();
@@ -26,82 +298,94 @@ enableStraightGuide(2); // threshold in degrees (tweak if you want)
     o._mStarted = false;
   });
 // true if touching edge(s); returns an object of flags
-function edgeFlags(o) {
-  const br = o.getBoundingRect(true, true);
-  return {
-    left:   br.left <= 0,
-    top:    br.top  <= 0,
-    right:  br.left + br.width  >= canvas.getWidth(),
-    bottom: br.top  + br.height >= canvas.getHeight(),
-  };
-}
-canvas.on('object:moving', (e) => {
-  const o = e.target;
-  if (!o) return;
-
-  if (!o._mStarted) {
-    o._mStarted = true;
-    o._lastLeft = o.left;
-    o._lastTop  = o.top;
+  function edgeFlags(o) {
+    const br = o.getBoundingRect(true, true);
+    return {
+      left:   br.left <= 0,
+      top:    br.top  <= 0,
+      right:  br.left + br.width  >= canvas.getWidth(),
+      bottom: br.top  + br.height >= canvas.getHeight(),
+    };
   }
+  canvas.on('object:moving', (e) => {
+    const o = e.target;
+    if (!o) return;
 
-  clampInsideCanvas(o);
-
-  const overlapped = firstOverlap(o);
-  if (overlapped) {
-    const nudged = resolveOverlapByPush(o, overlapped);
-    if (!nudged) {
-      o.set({ left: o._lastLeft, top: o._lastTop });
-      o.setCoords();
+    if (!o._mStarted) {
+      o._mStarted = true;
+      o._lastLeft = o.left;
+      o._lastTop  = o.top;
     }
-    o._violateOverlap = true;
-  } else {
-    o._violateOverlap = false;
-    o._lastLeft = o.left;
-    o._lastTop  = o.top;
-  }
 
-  // 👇 per-edge flags (for drawing just the touched edges)
-  o._edges = edgeFlags(o);
-  canvas._edges = o._edges;             // remember last for drawing
+    clampInsideCanvas(o);
 
-  canvas.requestRenderAll();
-});
-canvas.on('object:scaling', (e) => {
-  const o = e.target;
-  if (!o || o.type !== 'textbox') return;
+    const overlapped = firstOverlap(o);
+    if (overlapped) {
+      const nudged = resolveOverlapByPush(o, overlapped);
+      if (!nudged) {
+        o.set({ left: o._lastLeft, top: o._lastTop });
+        o.setCoords();
+      }
+      o._violateOverlap = true;
+    } else {
+      o._violateOverlap = false;
+      o._lastLeft = o.left;
+      o._lastTop  = o.top;
+    }
 
-  if (!o._sStarted) {
-    o._sStarted = true;
-    o._lastBox = { left: o.left, top: o.top, width: o.width, height: o.height };
-  }
+    // 👇 per-edge flags (for drawing just the touched edges)
+    o._edges = edgeFlags(o);
+    canvas._edges = o._edges;             // remember last for drawing
 
-  const newW = Math.max(60, Math.min(1000, o.width * o.scaleX));
-  const newH = Math.max(20, Math.min(2000, o.height * o.scaleY));
-
-  o.set({ width: newW, height: newH, scaleX: 1, scaleY: 1 });
-  clampInsideCanvas(o);
-  o.setCoords();
-
-  if (firstOverlap(o)) {
-    const b = o._lastBox;
-    o.set({ left: b.left, top: b.top, width: b.width, height: b.height });
-    o.setCoords();
-    o._violateOverlap = true;
-  } else {
-    o._violateOverlap = false;
-    o._lastBox = { left: o.left, top: o.top, width: o.width, height: o.height };
-  }
-
-  o._edges = edgeFlags(o);
-  canvas._edges = o._edges;
-
-  canvas.requestRenderAll();
-});
+    canvas.requestRenderAll();
+  });
+  // canvas.on('object:scaling', (e) => {
+  //   const o = e.target;
+  //   if (!o || o.type !== 'textbox') return;
+  //
+  //   if (!o._sStarted) {
+  //     o._sStarted = true;
+  //     o._lastBox = { left: o.left, top: o.top, width: o.width, height: o.height };
+  //   }
+  //
+  //   const newW = Math.max(60, Math.min(1000, o.width * o.scaleX));
+  //   const newH = Math.max(20, Math.min(2000, o.height * o.scaleY));
+  //
+  //   o.set({ width: newW, height: newH, scaleX: 1, scaleY: 1 });
+  //   clampInsideCanvas(o);
+  //   o.setCoords();
+  //
+  //   if (firstOverlap(o)) {
+  //     const b = o._lastBox;
+  //     o.set({ left: b.left, top: b.top, width: b.width, height: b.height });
+  //     o.setCoords();
+  //     o._violateOverlap = true;
+  //   } else {
+  //     o._violateOverlap = false;
+  //     o._lastBox = { left: o.left, top: o.top, width: o.width, height: o.height };
+  //   }
+  //
+  //   o._edges = edgeFlags(o);
+  //   canvas._edges = o._edges;
+  //
+  //   canvas.requestRenderAll();
+  // });
 
   canvas.on('object:modified', (e) => {
     const o = e.target;
     if (!o) return;
+
+    if ((o.type === 'textbox' || o.type === 'text') && typeof o.fontSize === 'number') {
+      // uniformScaling is on, so scaleX ≈ scaleY
+      const scale = o.scaleY || o.scaleX || 1;
+      if (scale && scale !== 1) {
+        const newSize = o.fontSize * scale;
+
+        o.set({ scaleX: 1, scaleY: 1 });
+        applyFontSize(o, newSize);
+      }
+    }
+
     o._violateEdge = false;
     o._violateOverlap = false;
     o._mStarted = false;
@@ -109,60 +393,66 @@ canvas.on('object:scaling', (e) => {
     canvas.requestRenderAll();
   });
 
-canvas.on('after:render', () => {
-  const ctx = canvas.contextContainer;
+  canvas.on('after:render', () => {
+    const ctx = canvas.contextContainer;
 
-  // draw canvas edges that are being touched
-  const ef = canvas._edges || {};
-  if (ef.left || ef.top || ef.right || ef.bottom) {
-    ctx.save();
-    ctx.strokeStyle = '#ff4d4f';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 3]);
+    // draw canvas edges that are being touched
+    const ef = canvas._edges || {};
+    if (ef.left || ef.top || ef.right || ef.bottom) {
+      ctx.save();
+      ctx.strokeStyle = '#ff4d4f';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 3]);
 
-    if (ef.top) {
-      ctx.beginPath();
-      ctx.moveTo(0.5, 0.5);
-      ctx.lineTo(canvas.getWidth() - 0.5, 0.5);
-      ctx.stroke();
+      if (ef.top) {
+        ctx.beginPath();
+        ctx.moveTo(0.5, 0.5);
+        ctx.lineTo(canvas.getWidth() - 0.5, 0.5);
+        ctx.stroke();
+      }
+      if (ef.bottom) {
+        const y = canvas.getHeight() - 0.5;
+        ctx.beginPath();
+        ctx.moveTo(0.5, y);
+        ctx.lineTo(canvas.getWidth() - 0.5, y);
+        ctx.stroke();
+      }
+      if (ef.left) {
+        ctx.beginPath();
+        ctx.moveTo(0.5, 0.5);
+        ctx.lineTo(0.5, canvas.getHeight() - 0.5);
+        ctx.stroke();
+      }
+      if (ef.right) {
+        const x = canvas.getWidth() - 0.5;
+        ctx.beginPath();
+        ctx.moveTo(x, 0.5);
+        ctx.lineTo(x, canvas.getHeight() - 0.5);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
-    if (ef.bottom) {
-      const y = canvas.getHeight() - 0.5;
-      ctx.beginPath();
-      ctx.moveTo(0.5, y);
-      ctx.lineTo(canvas.getWidth() - 0.5, y);
-      ctx.stroke();
-    }
-    if (ef.left) {
-      ctx.beginPath();
-      ctx.moveTo(0.5, 0.5);
-      ctx.lineTo(0.5, canvas.getHeight() - 0.5);
-      ctx.stroke();
-    }
-    if (ef.right) {
-      const x = canvas.getWidth() - 0.5;
-      ctx.beginPath();
-      ctx.moveTo(x, 0.5);
-      ctx.lineTo(x, canvas.getHeight() - 0.5);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
 
-  // object outlines when violating (unchanged)
-  canvas.getObjects().forEach((o) => {
-    if (!o.visible || (!o._violateOverlap)) return;
-    const br = o.getBoundingRect(true, true);
-    ctx.save();
-    ctx.strokeStyle = '#ff4d4f';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 3]);
-    ctx.strokeRect(br.left, br.top, br.width, br.height);
-    ctx.restore();
+    // object outlines when violating (unchanged)
+    canvas.getObjects().forEach((o) => {
+      if (!o.visible || (!o._violateOverlap)) return;
+      const br = o.getBoundingRect(true, true);
+      ctx.save();
+      ctx.strokeStyle = '#ff4d4f';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 3]);
+      ctx.strokeRect(br.left, br.top, br.width, br.height);
+      ctx.restore();
+    });
   });
-});
-
-
+  console.log(999)
+// inside initCanvas(), right after canvas = new fabric.Canvas(...)
+  if (!canvas._maskLoaded && window.__CANVAS_MASK_URL__) {
+    canvas._maskLoaded = true;
+    console.log("set enq enummm")
+    setCanvasMaskFromSvgUrl(window.__CANVAS_MASK_URL__)
+        .catch(err => console.error('Canvas mask failed:', err));
+  }
   return canvas;
 }
 let __currentFontFamily = 'Aero';
@@ -185,7 +475,7 @@ export function ensureFontLoaded(family, url /* string|null */) {
     if (fabric?.util?.clearFabricFontCache) {
       fabric.util.clearFabricFontCache();
     }
- const c = (typeof getCanvas === 'function') ? getCanvas() : canvas;
+    const c = (typeof getCanvas === 'function') ? getCanvas() : canvas;
     if (c && typeof c.requestRenderAll === 'function') c.requestRenderAll();
     return ff;
   })();
@@ -227,17 +517,17 @@ function initObjectToolbar() {
   __toolbarEl = frag.firstElementChild;
   __overlayEl.appendChild(__toolbarEl);
 
-const getActiveSupported = () => {
-  const c = (typeof getCanvas === 'function') ? getCanvas() : canvas;
-  const o = c?.getActiveObject?.();
-  if (!o || !o.emoId) return null;            // must be ours
+  const getActiveSupported = () => {
+    const c = (typeof getCanvas === 'function') ? getCanvas() : canvas;
+    const o = c?.getActiveObject?.();
+    if (!o || !o.emoId || !o.canvas) return null;
 
-  // support both text and image kinds
-  const isText  = (o.type === 'textbox' || o.type === 'text' || o.emoKind === 'text');
-  const isImage = (o.emoKind === 'image');
+    // support both text and image kinds
+    const isText  = (o.type === 'textbox' || o.type === 'text' || o.emoKind === 'text');
+    const isImage = (o.emoKind === 'image');
 
-  return (isText || isImage) ? { c, o, isText, isImage } : null;
-};
+    return (isText || isImage) ? { c, o, isText, isImage } : null;
+  };
   // DELETE (syncs with left panel)
   __toolbarEl.querySelector('.btn-trash')?.addEventListener('click', () => {
     const ctx = getActiveSupported(); if (!ctx) return;
@@ -257,58 +547,62 @@ const getActiveSupported = () => {
     o.set('flipX', !o.flipX);
     o.setCoords();
     c.requestRenderAll();
-    // Toolbar will follow via our follow handlers
-  });
+    const id = o.emoId;
+    if (id) {
+      window.dispatchEvent(new CustomEvent('emo:transform', { detail: { id } }));
+    }  });
 
   // DUPLICATE (clone visually + sync new card)
-__toolbarEl.querySelector('.btn-dup')?.addEventListener('click', () => {
-  const ctx = getActiveSupported(); if (!ctx) return;
-  const { c, o, isText, isImage } = ctx;
+  __toolbarEl.querySelector('.btn-dup')?.addEventListener('click', () => {
+    const ctx = getActiveSupported(); if (!ctx) return;
+    const { c, o, isText, isImage } = ctx;
 
-  if (isText) {
-    const id = addTextObject({
-      text:       o.text || '',
-      left:       (o.left || 0) + 20,
-      top:        (o.top  || 0) + 20,
-      angle:      o.angle || 0,
-      fontSize:   o.fontSize || 16,
-      fontFamily: o.fontFamily || 'Aero',
-      textAlign:  o.textAlign || 'left',
-      fill:       o.fill || '#000',
-      flipX:      !!o.flipX,
-      flipY:      !!o.flipY,
-      scaleX:     o.scaleX || 1,
-      scaleY:     o.scaleY || 1,
-      width:      o.width || undefined
-    });
-    if (id) {
-      selectObject(id);
-      c.requestRenderAll();
-      window.dispatchEvent(new CustomEvent('emo:added', { detail: { id } }));
-    }
-    return;
-  }
-
-  if (isImage) {
-    o.clone((cloned) => {
-      const id = crypto.randomUUID();
-      cloned.set({
-        left: (o.left || 0) + 20,
-        top:  (o.top  || 0) + 20,
-        emoId: id,
-        emoKind: 'image'
+    if (isText) {
+      const id = addTextObject({
+        text:       o.text || '',
+        left:       (o.left || 0) + 20,
+        top:        (o.top  || 0) + 20,
+        angle:      o.angle || 0,
+        fontSize:   o.fontSize || 16,
+        fontFamily: o.fontFamily || 'Aero',
+        textAlign:  o.textAlign || 'left',
+        fill:       o.fill || '#000',
+        flipX:      !!o.flipX,
+        flipY:      !!o.flipY,
+        scaleX:     o.scaleX || 1,
+        scaleY:     o.scaleY || 1,
+        width:      o.width || undefined
       });
-      c.add(cloned);
-      objectsById.set(id, cloned);
-      c.setActiveObject(cloned);
-      cloned.setCoords();
-      c.requestRenderAll();
-      window.dispatchEvent(new CustomEvent('emo:added', { detail: { id } }));
-      // make sure toolbar is visible for the duplicate right away
-      c.fire('selection:created', { selected: [cloned] });
-    }, ['*']);
-  }
-});
+      if (id) {
+        selectObject(id);
+        c.requestRenderAll();
+        window.dispatchEvent(new CustomEvent('emo:added', { detail: { id } }));
+      }
+      return;
+    }
+
+    if (isImage) {
+      o.clone((cloned) => {
+        const id = crypto.randomUUID();
+        cloned.set({
+          left: (o.left || 0) + 20,
+          top:  (o.top  || 0) + 20,
+          emoId: id,
+          emoKind: 'image'
+        });
+        c.add(cloned);
+        objectsById.set(id, cloned);
+        c.setActiveObject(cloned);
+        cloned.setCoords();
+        c.requestRenderAll();
+        cloned._svgSource = o._svgSource;
+        cloned._imageKind = o._imageKind;
+        cloned._imageSrc  = o._imageSrc;
+        window.dispatchEvent(new CustomEvent('emo:added', { detail: { id } }));
+        // make sure toolbar is visible for the duplicate right away
+      }, ['*']);
+    }
+  });
 
 
   // SAVE (same as clicking the panel’s ".js-exit-edit" for the selected card)
@@ -316,14 +610,14 @@ __toolbarEl.querySelector('.btn-dup')?.addEventListener('click', () => {
     const ctx = getActiveSupported(); if (!ctx) return;
     const { c,o } = ctx;
     const id = o.emoId;
-      if (typeof o.exitEditing === 'function') o.exitEditing();
-   c.discardActiveObject();
+    if (typeof o.exitEditing === 'function') o.exitEditing();
+    c.discardActiveObject();
 
     if (!id) return;
     // Let the panel exit edit mode for the matching card
     window.dispatchEvent(new CustomEvent('emo:save', { detail: { id } }));
     hideObjectToolbar();
-      c.requestRenderAll();
+    c.requestRenderAll();
 
   });
 
@@ -362,13 +656,13 @@ function attachToolbarFollowEvents() {
   const recalc = () => {
     const active = c.getActiveObject?.();
     if (!active || !active.emoId) {                 // allow both text & image if it’s ours
-    hideObjectToolbar();
-    return;
-  }
+      hideObjectToolbar();
+      return;
+    }
     showObjectToolbarFor(active);
   };
 
-  c.on('selection:created', ({ selected }) => {
+  c.on('selection:created', ({}) => {
     initObjectToolbar();
     recalc();
   });
@@ -386,37 +680,73 @@ function attachToolbarFollowEvents() {
 
 // create a text object and place it at a free spot (no overlap, inside edges)
 export function addTextObject({
-  text = '',
-  left = 100,
-  top = 100,
-  fontSize = 28,
-  width = 150,
-  align = 'left',
-   ...rest   
+                                text = '',
+                                left = null,
+                                top  = null,
+                                fontSize = 28,
+                                align = 'left',
+                                fontFamily = getDefaultFontFamily(),
+                                ...rest
+                              } = {}) {
+  const c = initCanvas();
+  if (!c) return null;
 
-} = {}) {
-  initCanvas();
-  const t = new fabric.Textbox(text, {
-    left, top, fontSize, width,
-    fill: '#000', fontFamily:  getDefaultFontFamily(),
+  const t = new fabric.Text(text, {
+    left: 0,
+    top:  0,
+    fontSize,
+    fill: '#000',
+    fontFamily,
     textAlign: align,
-    editable: true, selectable: true,
-    splitByGrapheme: false, // normal word wrap
+    editable: true,
+    selectable: true,
+    splitByGrapheme: false,
     lockScalingFlip: true,
-     ...rest 
+    ...rest,
   });
 
-  placeAtFreeSpot(t);
-  canvas.add(t);
+  // add first so Fabric can measure it properly
+  c.add(t);
+  enforceUniformScalingControls(t);
   t.setCoords();
-  canvas.setActiveObject(t);
-  canvas.requestRenderAll();
-canvas.fire('selection:created', { selected: [t] });
 
-  const id = crypto.randomUUID();
+  let lx = left;
+  let ty = top;
+
+  if (lx == null || ty == null) {
+    const cw = c.getWidth();
+    const ch = c.getHeight();
+    const br = t.getBoundingRect(true, true);
+
+    if (lx == null) lx = (cw - br.width) / 2;
+    if (ty == null) ty = (ch - br.height) / 2;
+  }
+
+  t.set({ left: lx, top: ty });
+  t.setCoords();
+
+  if (typeof clampInsideCanvas === 'function') {
+    clampInsideCanvas(t);
+  }
+  if (typeof firstOverlap === 'function' && typeof placeAtFreeSpot === 'function') {
+    const other = firstOverlap(t);
+    if (other) {
+      placeAtFreeSpot(t);
+    }
+  }
+  const id =
+      (rest && (rest.emoId || rest.id)) ||
+      (window.crypto?.randomUUID
+          ? window.crypto.randomUUID()
+          : String(Date.now() + Math.random()));
+
   t.set('emoId', id);
-  t.set('emoKind', 'text');     
+  t.set('emoKind', 'text');
   objectsById.set(id, t);
+
+  c.setActiveObject(t);
+  c.requestRenderAll();
+
   return id;
 }
 
@@ -457,18 +787,18 @@ export function enableStraightGuide(thresholdDeg = 1) {
       const center = o.getCenterPoint();
       // length = scaled width (always)
       const len = Math.max(2,
-        typeof o.getScaledWidth === 'function'
-          ? o.getScaledWidth()
-          : (o.width ?? 0) * (o.scaleX ?? 1)
+          typeof o.getScaledWidth === 'function'
+              ? o.getScaledWidth()
+              : (o.width ?? 0) * (o.scaleX ?? 1)
       );
 
       // unit vector along width axis (parallel to the guide)
       const rad = (o.angle || 0) * Math.PI / 180;
       const ux = Math.cos(rad), uy = Math.sin(rad);
 
-let fs = Number(o.fontSize);
-if (!isFinite(fs) || fs <= 0) fs = 16;          
-const offsetPx = (fs * (o.scaleY ?? 1)) / 2 + 4;      let cx = center.x, cy = center.y;
+      let fs = Number(o.fontSize);
+      if (!isFinite(fs) || fs <= 0) fs = 16;
+      const offsetPx = (fs * (o.scaleY ?? 1)) / 2 + 4;      let cx = center.x, cy = center.y;
       if (target === 0 || target === 180) {
         // horizontal → move a bit DOWN in screen space
         cy += offsetPx;
@@ -512,12 +842,19 @@ const offsetPx = (fs * (o.scaleY ?? 1)) / 2 + 4;      let cx = center.x, cy = ce
 export function removeObject(id) {
   const o = objectsById.get(id);
   if (!o) return;
-  canvas?.remove(o);
-  objectsById.delete(id);
-  canvas?.discardActiveObject();
-  canvas?.requestRenderAll();
 
-  // 🔔 notify panels no matter who initiated the remove
+  const c = initCanvas();
+  if (!c) return;
+
+  // If this object is active, clear selection BEFORE removing it
+  if (c.getActiveObject?.() === o) {
+    c.discardActiveObject();
+  }
+
+  c.remove(o);
+  objectsById.delete(id);
+  c.requestRenderAll();
+
   try {
     window.dispatchEvent(new CustomEvent('emo:removed', { detail: { id } }));
   } catch (_) {}
@@ -526,9 +863,14 @@ export function removeObject(id) {
 export function selectObject(id) {
   const o = objectsById.get(id);
   if (!o) return;
-  canvas?.setActiveObject(o);
-  canvas?.requestRenderAll();
+
+  const c = initCanvas();
+  if (!c) return;
+
+  c.setActiveObject(o);
+  c.requestRenderAll();
 }
+
 export async function addSvgFromFile(file) {
   const isSvg = file && (file.type === 'image/svg+xml' || /\.svg$/i.test(file.name));
   if (!isSvg) throw new Error('Only SVG files are allowed');
@@ -539,9 +881,9 @@ export async function addSvgFromFile(file) {
 
   // strip doctype/comments/styles that can trip Fabric
   svgText = svgText
-    .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+      .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
 
   if (!/<svg[\s\S]*?>/i.test(svgText)) {
     throw new Error('Invalid SVG file');
@@ -557,38 +899,232 @@ export async function addSvgFromFile(file) {
 
         const svgObj = fabric.util.groupSVGElements(objects, options);
 
-        // center & scale to fit
-        const w = svgObj.width || 1, h = svgObj.height || 1;
-        const maxW = c.getWidth() * 0.8, maxH = c.getHeight() * 0.8;
-        const s = Math.min(maxW / w, maxH / h, 1);
+        // 🔥 1) initial scale so it fits inside canvas (with margin)
+        const cw = c.getWidth();
+        const ch = c.getHeight();
+        const pad = 16; // margin to canvas edges
+
+        const rawW = svgObj.width  || 1;
+        const rawH = svgObj.height || 1;
+
+        const maxW = cw - pad * 2;
+        const maxH = ch - pad * 2;
+        const s0   = Math.min(maxW / rawW, maxH / rawH, 1);
 
         svgObj.set({
-          left: (c.getWidth() - w * s) / 2,
-          top:  (c.getHeight() - h * s) / 2,
-          scaleX: s, scaleY: s,
+          scaleX: s0,
+          scaleY: s0,
           selectable: true,
           lockScalingFlip: false,
         });
+        enforceUniformScalingControls(svgObj);
 
-     const id = crypto.randomUUID();
-svgObj.set('emoId', id);
-svgObj.set('emoKind', 'image');         // ← add this line
-c.add(svgObj);
-objectsById.set(id, svgObj);            // ← and this
-c.setActiveObject(svgObj);
-svgObj.setCoords();
-c.requestRenderAll();
-c.fire('selection:created', { selected: [svgObj] });
+        // 🔥 2) find nearest-to-center position with no overlap (and shrink if needed)
+        autoPlaceImageWithoutOverlap(svgObj, c, pad);
 
-resolve(id);                       
-        
+        // 🔥 3) identify & track
+        const id = crypto.randomUUID();
+        svgObj.set('emoId', id);
+        svgObj.set('emoKind', 'image');
+        // store cleaned SVG so image step can save/rehydrate
+        svgObj._svgSource = svgText;
+        svgObj._imageKind = 'upload';
+
+        c.add(svgObj);
+        objectsById.set(id, svgObj);
+        c.setActiveObject(svgObj);
+        svgObj.setCoords();
+        c.requestRenderAll();
+
+        resolve(id);
       });
     } catch (err) {
       reject(err || new Error('Failed to parse SVG'));
     }
   });
 }
+function autoPlaceImageWithoutOverlap(o, c, pad = 8) {
+  const cw = c.getWidth();
+  const ch = c.getHeight();
 
+  // start from whatever scale the caller set
+  let scaleX = o.scaleX || 1;
+  let scaleY = o.scaleY || 1;
+
+  const minScale = 0.15;   // don’t shrink below this
+  const step     = 24;     // grid step in px
+  const maxAttempts = 6;   // how many times to shrink & retry
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    // update scale for this attempt (first attempt = original scale)
+    if (attempt > 0) {
+      scaleX *= 0.85;
+      scaleY *= 0.85;
+      if (scaleX < minScale || scaleY < minScale) break;
+    }
+
+    o.set({ scaleX, scaleY });
+    o.setCoords();
+
+    // measure current visual bounds
+    const br = o.getBoundingRect(true, true);
+    let w = br.width  || 1;
+    let h = br.height || 1;
+
+    // if still too big for canvas, try smaller
+    if (w > cw - pad * 2 || h > ch - pad * 2) {
+      continue;
+    }
+
+    // ideal center placement (top-left of bounding box)
+    const centerX = (cw - w) / 2;
+    const centerY = (ch - h) / 2;
+
+    // build candidate positions on a grid, sorted by distance to center
+    const candidates = [];
+    for (let y = pad; y + h + pad <= ch; y += step) {
+      for (let x = pad; x + w + pad <= cw; x += step) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const dist = dx * dx + dy * dy;
+        candidates.push({ x, y, dist });
+      }
+    }
+    candidates.sort((a, b) => a.dist - b.dist);
+
+    // try each candidate until we find one that doesn’t overlap
+    for (const pos of candidates) {
+      if (rectIsFree(pos.x, pos.y, w, h)) {
+        o.set({ left: pos.x, top: pos.y });
+        o.setCoords();
+        return;
+      }
+    }
+  }
+
+  // fallback: center + clamp (may overlap if absolutely no space)
+  const finalW = (o.width  || 1) * (o.scaleX || 1);
+  const finalH = (o.height || 1) * (o.scaleY || 1);
+
+  o.set({
+    left: Math.max(pad, (cw - finalW) / 2),
+    top:  Math.max(pad, (ch - finalH) / 2),
+  });
+  clampInsideCanvas(o);
+  o.setCoords();
+}
+
+
+// svgText: cleaned SVG string
+// opts: used BOTH by rehydrate + library
+export function addSvgFromMarkup(svgText, opts = {}) {
+  const {
+    emoId,
+    left,
+    top,
+    angle,
+    scaleX,
+    scaleY,
+    flipX,
+    flipY,
+    autoPlace = false,
+    kind = 'upload',
+  } = opts;
+
+  const c = initCanvas();
+
+  return new Promise((resolve, reject) => {
+    try {
+      // defensive: strip style/doctype again if needed
+      let text = svgText
+          .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
+          .replace(/<!--[\s\S]*?-->/g, '')
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+
+      if (!/<svg[\s\S]*?>/i.test(text)) {
+        reject(new Error('Invalid SVG markup'));
+        return;
+      }
+
+      fabric.loadSVGFromString(text, (objects, options) => {
+        if (!objects || !objects.length) {
+          reject(new Error('Empty or unsupported SVG'));
+          return;
+        }
+
+        const svgObj = fabric.util.groupSVGElements(objects, options);
+
+        const cw = c.getWidth();
+        const ch = c.getHeight();
+        const pad = 16;
+
+        // --- base scale (fit into canvas if no explicit scale is given)
+        const rawW = svgObj.width  || 1;
+        const rawH = svgObj.height || 1;
+
+        let sx = scaleX;
+        let sy = scaleY;
+
+        if (sx == null || sy == null) {
+          const maxW = cw - pad * 2;
+          const maxH = ch - pad * 2;
+          const s0   = Math.min(maxW / rawW, maxH / rawH, 1);
+          sx = sy = s0;
+        }
+
+        svgObj.set({
+          scaleX: sx,
+          scaleY: sy,
+          angle:  angle ?? 0,
+          flipX: !!flipX,
+          flipY: !!flipY,
+          selectable: true,
+          lockScalingFlip: false,
+        });
+        enforceUniformScalingControls(svgObj);
+
+        // --- positioning
+        if (left != null && top != null) {
+          // rehydrate path: use stored position
+          svgObj.set({ left, top });
+          svgObj.setCoords();
+        } else if (autoPlace) {
+          // 🔥 library / “spawn new” path:
+          autoPlaceImageWithoutOverlap(svgObj, c, pad);
+        } else {
+          // simple center fallback
+          const wScaled = (rawW * sx);
+          const hScaled = (rawH * sy);
+          svgObj.set({
+            left: (cw - wScaled) / 2,
+            top:  (ch - hScaled) / 2,
+          });
+          svgObj.setCoords();
+        }
+
+        // id + meta
+        const id = emoId || (crypto.randomUUID
+            ? crypto.randomUUID()
+            : String(Date.now() + Math.random()));
+
+        svgObj.set('emoId', id);
+        svgObj.set('emoKind', 'image');
+        svgObj._svgSource = text;
+        svgObj._imageKind = kind;
+
+        c.add(svgObj);
+        objectsById.set(id, svgObj);
+        c.setActiveObject(svgObj);
+        svgObj.setCoords();
+        c.requestRenderAll();
+
+        resolve(id);
+      });
+    } catch (err) {
+      reject(err || new Error('Failed to add SVG from markup'));
+    }
+  });
+}
 
 
 /* ---------- helpers ---------- */
@@ -614,21 +1150,14 @@ function clampInsideCanvas(o) {
   }
 }
 
-// true if touching or beyond any edge
-function touchesEdge(o) {
-  const br = o.getBoundingRect(true, true);
-  return (
-    br.left <= 0 ||
-    br.top <= 0 ||
-    br.left + br.width >= canvas.getWidth() ||
-    br.top + br.height >= canvas.getHeight()
-  );
-}
-
 // first overlapping other object (excluding 'o'), else null
 function firstOverlap(o) {
   const a = o.getBoundingRect(true, true);
-  const objs = canvas.getObjects().filter(p => p !== o && p.visible);
+  const objs = canvas.getObjects().filter(p =>
+      p !== o &&
+      p.visible &&
+      !p._isLayout
+  );
   for (const bObj of objs) {
     const b = bObj.getBoundingRect(true, true);
     if (rectsOverlap(a, b)) return bObj;
@@ -636,12 +1165,13 @@ function firstOverlap(o) {
   return null;
 }
 
+
 function rectsOverlap(a, b) {
   return !(
-    a.left + a.width  <= b.left ||
-    b.left + b.width  <= a.left ||
-    a.top  + a.height <= b.top  ||
-    b.top  + b.height <= a.top
+      a.left + a.width  <= b.left ||
+      b.left + b.width  <= a.left ||
+      a.top  + a.height <= b.top  ||
+      b.top  + b.height <= a.top
   );
 }
 
@@ -676,76 +1206,81 @@ function resolveOverlapByPush(o, other) {
 
 /* ----- spawn helper: find a free spot before adding ----- */
 function placeAtFreeSpot(o) {
+  const c = initCanvas();
+  if (!c) return;
+
+  const objs = c.getObjects();
+  const alreadyOnCanvas = objs.includes(o);
+
   // measure current size
-  canvas.add(o);        // temp add to get accurate bounds
+  if (!alreadyOnCanvas) {
+    c.add(o);
+  }
   o.setCoords();
-  let br = o.getBoundingRect(true, true);
-  canvas.remove(o);
+  const br = o.getBoundingRect(true, true);
+  if (!alreadyOnCanvas) {
+    c.remove(o);
+  }
 
-  const pad = 8; // small inner margin
-  const cw = canvas.getWidth(), ch = canvas.getHeight();
-  const step = 24; // grid step for scanning
+  const pad  = 8;                // inner margin
+  const cw   = c.getWidth();
+  const ch   = c.getHeight();
+  const step = 24;               // grid step for scanning
 
-  // scan from (pad,pad) across rows to find first free cell
-  for (let y = pad; y + br.height + pad <= ch; y += step) {
-    for (let x = pad; x + br.width + pad <= cw; x += step) {
-      if (rectIsFree(x, y, br.width, br.height)) {
-        o.left = x; o.top = y;
-        return;
-      }
+  const w = br.width  || 1;
+  const h = br.height || 1;
+
+  // “ideal” center top-left for this box
+  const centerX = (cw - w) / 2;
+  const centerY = (ch - h) / 2;
+
+  // build all candidate positions on a grid, then sort by distance to center
+  const candidates = [];
+  for (let y = pad; y + h + pad <= ch; y += step) {
+    for (let x = pad; x + w + pad <= cw; x += step) {
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const dist2 = dx * dx + dy * dy;
+      candidates.push({ x, y, dist2 });
+    }
+  }
+  candidates.sort((a, b) => a.dist2 - b.dist2);
+
+  // pick the closest free spot to center
+  for (const pos of candidates) {
+    if (rectIsFree(pos.x, pos.y, w, h)) {
+      o.left = pos.x;
+      o.top  = pos.y;
+      o.setCoords();
+      return;
     }
   }
 
-  // fallback: center (clamped)
-  o.left = Math.max(pad, Math.min(cw - br.width - pad, (cw - br.width)/2));
-  o.top  = Math.max(pad, Math.min(ch - br.height - pad, (ch - br.height)/2));
+  // fallback: exact geometric center, clamped
+  o.left = Math.max(pad, Math.min(cw - w - pad, centerX));
+  o.top  = Math.max(pad, Math.min(ch - h - pad, centerY));
+  o.setCoords();
 }
+
+
 
 // check if a rectangle would overlap any existing object
 function rectIsFree(left, top, width, height) {
+  const c = canvas || initCanvas();
+  if (!c) return true;
+
   const a = { left, top, width, height };
-  return !canvas.getObjects().some(bObj => {
+
+  return !c.getObjects().some((bObj) => {
+    if (!bObj.visible || bObj._isLayout) return false;  // 👈 skip bg/layout
     const b = bObj.getBoundingRect(true, true);
     return rectsOverlap(a, b);
   });
 }
 
 
-
-export function setTextAlign(id, align /* 'left'|'center'|'right' */) {
-  const o = objectsById.get(id);
-  if (!o) return;
-
-  // Upgrade to Textbox if needed (preserve props)
-  if (o.type !== 'textbox') {
-    const props = {
-      left: o.left, top: o.top, angle: o.angle,
-      fontFamily: o.fontFamily, fontSize: o.fontSize, fill: o.fill,
-      text: o.text || '', width: o.width || 260, editable: true, selectable: true,
-      lockScalingFlip: true,
-    };
-    const tb = new fabric.Textbox(props.text, props);
-    tb.set('emoId', id);
-    canvas.add(tb);
-    canvas.remove(o);
-    objectsById.set(id, tb);
-    canvas.setActiveObject(tb);
-  }
-
-  const t = objectsById.get(id); // now guaranteed textbox
-
-  // Ensure there is room to see alignment (give it some min width)
-  const minW = Math.max(200, t.width || 0); // tweak to taste
-  t.set({ width: minW, textAlign: align });
-
-  // force reflow + redraw
-  t.setCoords();
-  t.dirty = true;
-  canvas.requestRenderAll();
-}
 // add this export
-export function setFontSize(id, size /* number */) {
-  const o = objectsById.get(id);
+function applyFontSize(o, size /* number */) {
   if (!o) return;
 
   // reasonable clamp (tweak to taste)
@@ -755,6 +1290,7 @@ export function setFontSize(id, size /* number */) {
   const center = o.getCenterPoint();
 
   o.set({ fontSize });
+
   // reflow textbox layout cache
   if (typeof o._clearCache === 'function') o._clearCache();
   o._textLines = null;
@@ -769,5 +1305,46 @@ export function setFontSize(id, size /* number */) {
   o.setPositionByOrigin(center, 'center', 'center');
   o.setCoords();
   o.dirty = true;
+}
+
+// public API used by the text panel
+export function setFontSize(id, size /* number */) {
+  const o = objectsById.get(id);
+  if (!o) return;
+
+  applyFontSize(o, size);
   canvas.requestRenderAll();
 }
+
+function enforceUniformScalingControls(o) {
+  if (!o || !o.setControlsVisibility) return;
+
+  o.setControlsVisibility({
+    mt: false,
+    mb: false,
+    ml: false,
+    mr: false,
+    // corners + rotate stay visible
+  });
+
+  if (o.controls && o.controls.mtr) {
+    o.controls.mtr.y = 0.5;
+    o.controls.mtr.offsetY = 40;
+  }
+}
+// --- SAFETY PATCH: avoid crashes when an object has no canvas but Fabric tries to draw controls
+if (window.fabric && fabric.Object && !fabric.Object.__emoPatchedDrawControls) {
+  const originalDrawControls = fabric.Object.prototype.drawControls;
+
+  fabric.Object.prototype.drawControls = function (ctx, options) {
+    // If this object is no longer attached to a canvas, just skip drawing controls
+    if (!this.canvas || typeof this.canvas.getRetinaScaling !== 'function') {
+      return;
+    }
+
+    return originalDrawControls.call(this, ctx, options);
+  };
+
+  fabric.Object.__emoPatchedDrawControls = true;
+}
+
