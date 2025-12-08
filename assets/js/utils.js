@@ -131,7 +131,7 @@ export function showAlert(type, text = null, autoCloseMs = 4000) {
 
   const clone = tpl.content.firstElementChild.cloneNode(true);
 
-  clone.querySelector('.alert-text').textContent =
+  clone.querySelector('.alert-text').innerHTML =
       text || DEFAULT_TEXT[type];
   container.appendChild(clone);
 

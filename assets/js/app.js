@@ -2,6 +2,9 @@ import onTextTab from './panels/text.js';
 import onImageTab from './panels/image.js';
 import onColorTab from './panels/color.js';
 import onProductTab from './panels/product.js';
+import onFasteningTab from './panels/fastening.js';
+import onExtensionTab from './panels/extension.js';
+
 import { initBackground } from './background.js';
 import { initTabsSession } from './tabs-session.js';
 import { rehydrateInitialPreview } from './utils.js'; // 👈 add this
@@ -11,6 +14,9 @@ const panelLoaders = {
   'pane-color':   async () => onColorTab,
   'pane-text':    async () => onTextTab,
   'pane-image':   async () => onImageTab,
+  'pane-fastening':   async () => onFasteningTab,
+  'pane-extension':   async () => onExtensionTab,
+
   'pane-size':    async () => {
     const m = await import('./panels/size.js');   // ← lazy-load
     return m.default;

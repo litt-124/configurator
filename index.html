@@ -1154,9 +1154,9 @@
                             <div class="text-card__advanced js-text-advanced">
                                 <div class="mb-3">
                                     <label>
-                                    <input class="form-control js-text-advanced-input"
-                                           placeholder="Your text here"
-                                           type="text">
+                                        <input class="form-control js-text-advanced-input"
+                                               placeholder="Your text here"
+                                               type="text">
                                     </label>
                                 </div>
 
@@ -1298,197 +1298,301 @@
                         </div>
                     </div>
                 </div>
-                <!--                &lt;!&ndash; Fastening &ndash;&gt;-->
-                <!--                <div class="tab-pane fade" id="pane-fastening" role="tabpanel">-->
-                <!--                    <div class="accordion" id="fasteningAccordion">-->
-                <!--                        <div class="accordion-header p-m">-->
-                <!--                            <svg class="icon" aria-hidden="true">-->
-                <!--                                <use href="#i-back-big"/>-->
-                <!--                            </svg>-->
-                <!--                            <div class="accordion-title typo-title-3-m">Fastening</div>-->
-                <!--                        </div>-->
+                <!-- Fastening -->
 
-                <!--                        <div class="tab-content-inner">-->
-                <!--                            <form id="fasteningForm" class="">-->
+                <div class="tab-pane fade show" id="pane-fastening" role="tabpanel">
+                    <div class="tab-content-header p-m">
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#i-back-big"></use>
+                        </svg>
+                        <div class="tab-content-title typo-title-3-m">Fastening</div>
+                    </div>
 
-                <!--                                &lt;!&ndash; Without fixing material &ndash;&gt;-->
-                <!--                                <div class="accordion-item product-item p-m">-->
-                <!--                                    <h2 class="accordion-body-header">-->
-                <!--                                        <button class="accordion-button collapsed product-head" type="button"-->
-                <!--                                                data-bs-toggle="collapse" data-bs-target="#fast1" aria-expanded="false"-->
-                <!--                                                aria-controls="fast1">-->
-                <!--                                            <img src="https://picsum.photos/seed/fast-none/64/64" class="thumb"-->
-                <!--                                                 alt="Without fixing material">-->
-                <!--                                            <div class="form-check">-->
-                <!--                                                <input class="form-check-input" type="radio" name="fastening"-->
-                <!--                                                       id="f1" value="none">-->
-                <!--                                            </div>-->
-                <!--                                            <div class="head-main">-->
-                <!--                                                <div class="title typo-body-2">Without fixing material</div>-->
-                <!--                                                <p class="description typo-caption-m">-->
-                <!--                                                    Clean plate only. Choose this if you already have your own-->
-                <!--                                                    mounting solution.-->
-                <!--                                                </p>-->
-                <!--                                                <div class="price text-md fw-bold">€ 0</div>-->
-                <!--                                            </div>-->
-                <!--                                        </button>-->
-                <!--                                    </h2>-->
-                <!--                                    <div id="fast1" class="accordion-collapse collapse"-->
-                <!--                                         data-bs-parent="#fasteningAccordion">-->
-                <!--                                        <div class="accordion-body">-->
-                <!--                                            <div class="media-grid">-->
-                <!--                                                <img src="https://picsum.photos/seed/fast-none-lg/640/480"-->
-                <!--                                                     class="img-fluid rounded" alt="Without fixing material">-->
-                <!--                                            </div>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
+                    <div class="tab-content-inner hide-scrollbar">
 
-                <!--                                &lt;!&ndash; Silicone adhesive &ndash;&gt;-->
-                <!--                                <div class="accordion-item product-item p-m">-->
-                <!--                                    <h2 class="accordion-body-header">-->
-                <!--                                        <button class="accordion-button collapsed product-head" type="button"-->
-                <!--                                                data-bs-toggle="collapse" data-bs-target="#fast2" aria-expanded="false"-->
-                <!--                                                aria-controls="fast2">-->
-                <!--                                            <img src="https://picsum.photos/seed/fast-glue/64/64" class="thumb"-->
-                <!--                                                 alt="Silicone adhesive">-->
-                <!--                                            <div class="form-check">-->
-                <!--                                                <input class="form-check-input" type="radio" name="fastening"-->
-                <!--                                                       id="f2" value="silicone-adhesive">-->
-                <!--                                            </div>-->
-                <!--                                            <div class="head-main">-->
-                <!--                                                <div class="title typo-body-2">Silicone adhesive</div>-->
-                <!--                                                <p class="description typo-caption-m">-->
-                <!--                                                    High-bond silicone adhesive for smooth surfaces. No drilling-->
-                <!--                                                    required.-->
-                <!--                                                </p>-->
-                <!--                                                <div class="price text-md fw-bold">€ 23.99</div>-->
-                <!--                                            </div>-->
-                <!--                                        </button>-->
-                <!--                                    </h2>-->
-                <!--                                    <div id="fast2" class="accordion-collapse collapse"-->
-                <!--                                         data-bs-parent="#fasteningAccordion">-->
-                <!--                                        <div class="accordion-body">-->
-                <!--                                            <div class="media-grid">-->
-                <!--                                                <img src="https://picsum.photos/seed/fast-glue-lg/640/480"-->
-                <!--                                                     class="img-fluid rounded" alt="Silicone adhesive">-->
-                <!--                                            </div>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
+                        <form id="fasteningForm" aria-describedby="fastening-help">
+                            <p id="fastening-help" class="visually-hidden">
+                                Choose one of the available fastening types. Expand an item to see more images.
+                                When ready, click Save to continue.
+                            </p>
 
-                <!--                                &lt;!&ndash; Screw set (wall mounting kit) &ndash;&gt;-->
-                <!--                                <div class="accordion-item product-item p-m">-->
-                <!--                                    <h2 class="accordion-body-header">-->
-                <!--                                        <button class="accordion-button collapsed product-head" type="button"-->
-                <!--                                                data-bs-toggle="collapse" data-bs-target="#fast3" aria-expanded="false"-->
-                <!--                                                aria-controls="fast3">-->
-                <!--                                            <img src="https://picsum.photos/seed/fast-screws/64/64" class="thumb"-->
-                <!--                                                 alt="Screw set & spacers">-->
-                <!--                                            <div class="form-check">-->
-                <!--                                                <input class="form-check-input" type="radio" name="fastening"-->
-                <!--                                                       id="f3" value="screw-set">-->
-                <!--                                            </div>-->
-                <!--                                            <div class="head-main">-->
-                <!--                                                <div class="title typo-body-2">Screw set &amp; spacers</div>-->
-                <!--                                                <p class="description typo-caption-m">-->
-                <!--                                                    Wall mounting kit with screws, dowels and spacers for secure-->
-                <!--                                                    installation.-->
-                <!--                                                </p>-->
-                <!--                                                <div class="price text-md fw-bold">€ 23.99</div>-->
-                <!--                                            </div>-->
-                <!--                                        </button>-->
-                <!--                                    </h2>-->
-                <!--                                    <div id="fast3" class="accordion-collapse collapse"-->
-                <!--                                         data-bs-parent="#fasteningAccordion">-->
-                <!--                                        <div class="accordion-body">-->
-                <!--                                            <div class="media-grid">-->
-                <!--                                                <img src="https://picsum.photos/seed/fast-screws-lg/640/480"-->
-                <!--                                                     class="img-fluid rounded" alt="Screw set & spacers">-->
-                <!--                                            </div>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
+                            <!-- fastening 1 -->
+                            <div class="tab-content-item js-tab-content-item p-m">
+                                <div class="tab-content-item-header">
+                                    <img src="/assets/img/fastenings/fastening_1.png"
+                                         class="thumb js-fastening-thumb"
+                                         alt="Without fixing material main image">
 
+                                    <div class="form-check">
+                                        <label for="f1" class="visually-hidden">Without fixing material</label>
+                                        <input class="form-check-input js-fastening-input"
+                                               type="radio"
+                                               name="fastening"
+                                               id="f1"
+                                               value="no-material"
+                                               aria-describedby="f1-title f1-price">
+                                    </div>
 
-                <!--                            </form>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                &lt;!&ndash; Extension &ndash;&gt;-->
-                <!--                <div class="tab-pane fade p-3 " id="pane-extension" role="tabpanel">-->
-                <!--                    <div class="accordion" id="plateAccordion">-->
-                <!--                        <div class="accordion-header p-m">-->
-                <!--                            <svg class="icon" aria-hidden="true">-->
-                <!--                                <use href="#i-back-big"/>-->
-                <!--                            </svg>-->
-                <!--                            <div class="accordion-title typo-title-3-m">Extensions</div>-->
-                <!--                        </div>-->
+                                    <div class="head-main">
+                                        <div id="f1-title" class="title typo-body-2">Without fixing material</div>
+                                        <p class="description typo-caption-m pt-1">
+                                            Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam adipiscing
+                                            blandit.
+                                        </p>
+                                        <div id="f1-price" class="price text-md fw-bold">€ 0</div>
+                                    </div>
 
-                <!--                        <div class="tab-content-inner">-->
+                                    <button class="item-toggle btn btn-link collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#fast1"
+                                            aria-expanded="false"
+                                            aria-controls="fast1">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use href="#i-down"></use>
+                                        </svg>
+                                        <span class="visually-hidden">
+                            Show more images for Without fixing material
+                        </span>
+                                    </button>
+                                </div>
 
-                <!--                            &lt;!&ndash; 2. First Plate &ndash;&gt;-->
-                <!--                            <div class="accordion-item p-m">-->
-                <!--                                <h2 class="accordion-body-header">-->
-                <!--                                    <button class="accordion-button collapsed product-head" type="button"-->
-                <!--                                            data-bs-toggle="collapse" data-bs-target="#plate2" aria-expanded="false"-->
-                <!--                                            aria-controls="plate2">-->
-                <!--                                        <div class="thumb-box typo-title-3" aria-hidden="true">1</div>-->
-                <!--                                        <div class="head-main">-->
-                <!--                                            <div class="title typo-body-2">Title</div>-->
-                <!--                                        </div>-->
-                <!--                                    </button>-->
-                <!--                                </h2>-->
-                <!--                                <div id="plate2" class="accordion-collapse collapse"-->
-                <!--                                     data-bs-parent="#plateAccordion">-->
-                <!--                                    <div class="accordion-body">-->
-                <!--                                        <p class="mt-2 description typo-caption-m">-->
-                <!--                                            Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam-->
-                <!--                                            adipiscing blandit.-->
-                <!--                                            Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam-->
-                <!--                                            adipiscing blandit.-->
-                <!--                                        </p>-->
+                                <div id="fast1" class="item-collapse collapse">
+                                    <div class="tab-content-item-body">
+                                        <div class="media-grid">
+                                            <div class="media-container">
+                                                <!-- this could also open a video, just add the trigger class+data -->
+                                                <img src="/assets/img/fastenings/fastening_1.png"
+                                                     class="img-fluid rounded"
+                                                     alt="Without fixing material – detail view">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!--                                        <btn class="btn btn-primary w-100 mb-2">Save</btn>-->
-                <!--                                        <div class="row g-4 pet-grid">-->
-                <!--                                            &lt;!&ndash; repeat this .col for as many items as you need &ndash;&gt;-->
-                <!--                                            <div class="col-12 col-sm-6">-->
-                <!--                                                <article class="pet-card">-->
-                <!--                                                    <div class="pet-card__media">-->
-                <!--                                                        <img src="/assets/img/logo.svg" alt="Brand logo">-->
-                <!--                                                    </div>-->
+                            <!-- fastening 2 (with video trigger) -->
+                            <div class="tab-content-item js-tab-content-item p-m">
+                                <div class="tab-content-item-header">
+                                    <img src="/assets/img/fastenings/fastening_2.png"
+                                         class="thumb js-fastening-thumb"
+                                         alt="Silicone adhesive main image">
 
-                <!--                                                    <div class="pet-card__body">-->
-                <!--                                                        <h3 class="pet-card__title typo-body-2">Title </h3>-->
-                <!--                                                        <div class="pet-card__price typo-title-3">+ 3.00 €</div>-->
-                <!--                                                    </div>-->
-                <!--                                                </article>-->
-                <!--                                            </div>-->
+                                    <div class="form-check">
+                                        <label for="f2" class="visually-hidden">Silicone adhesive</label>
+                                        <input class="form-check-input js-fastening-input"
+                                               type="radio"
+                                               name="fastening"
+                                               id="f2"
+                                               value="silicone"
+                                               aria-describedby="f2-title f2-price">
+                                    </div>
 
-                <!--                                            &lt;!&ndash; duplicate cols &ndash;&gt;-->
-                <!--                                            <div class="col-12 col-sm-6">-->
-                <!--                                                <article class="pet-card">-->
-                <!--                                                    <div class="pet-card__media">-->
-                <!--                                                        <img src="/assets/img/logo.svg" alt="Brand logo">-->
-                <!--                                                    </div>-->
-                <!--                                                    <div class="pet-card__body">-->
-                <!--                                                        <h3 class="pet-card__title typo-body-2">Title</h3>-->
-                <!--                                                        <div class="pet-card__price typo-title-3">+ 3.00 €</div>-->
-                <!--                                                    </div>-->
-                <!--                                                </article>-->
-                <!--                                            </div>-->
+                                    <div class="head-main">
+                                        <div id="f2-title" class="title typo-body-2">Silicone adhesive</div>
+                                        <p class="description typo-caption-m pt-1">
+                                            Lorem ipsum dolor sit amet consectetur. Pretiumsdf amet aliquam adipiscing
+                                            blandit.
+                                        </p>
+                                        <div id="f2-price" class="price text-md fw-bold">€ 23.99</div>
+                                    </div>
 
-                <!--                                            &lt;!&ndash; …add more items… &ndash;&gt;-->
-                <!--                                        </div>-->
+                                    <button class="item-toggle btn btn-link collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#fast2"
+                                            aria-expanded="false"
+                                            aria-controls="fast2">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use href="#i-down"></use>
+                                        </svg>
+                                        <span class="visually-hidden">
+                            Show more images for Silicone adhesive
+                        </span>
+                                    </button>
+                                </div>
 
-                <!--                                    </div>-->
-                <!--                                </div>-->
-                <!--                            </div>-->
+                                <div id="fast2" class="item-collapse collapse">
+                                    <div class="tab-content-item-body">
+                                        <div class="media-grid">
+                                            <div class="media-container">
+                                                <button type="button"
+                                                        class="media-btn js-fastening-video-trigger btn btn-link"
+                                                        data-fastening-video-src="/assets/img/fastenings/fastening_2.mp4"
+                                                        data-fastening-video-title="Silicone adhesive">
+                                                    <img src="/assets/img/fastenings/fastening_2.png"
+                                                         class="img-fluid rounded"
+                                                         alt="Silicone adhesive – detail view, click to play video">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!--                        </div>-->
-                <!--                    </div>-->
+                        </form>
 
-                <!--                </div>-->
+                        <div class="tab-content-footer">
+                            <button class="btn btn-primary w-100 js-save-button" type="button">
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Extension -->
+                <div class="tab-pane fade p-3" id="pane-extension" role="tabpanel">
+                    <div class="tab-content-header p-m">
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#i-back-big"></use>
+                        </svg>
+                        <div class="tab-content-title typo-title-3-m">Extensions</div>
+                    </div>
+
+                    <div class="tab-content-inner hide-scrollbar js-extension-inner">
+                        <form id="extensionForm" aria-describedby="extension-help">
+                            <p id="extension-help" class="visually-hidden">
+                                Configure optional extensions step by step. Choose an option in each section and click
+                                Save to move to the next one.
+                            </p>
+
+                            <!-- Extension 1 -->
+                            <div class="tab-content-item js-tab-content-item js-extension-item p-m">
+                                <div class="tab-content-item-header">
+                                    <div class="thumb-imitation-box typo-title-3 js-thumb-imitation-box">
+                                        1
+                                    </div>
+                                    <div class="head-main">
+                                        <div class="title typo-body-2">Extension 1</div>
+                                        <p class="description typo-caption-m pt-1">
+                                            Lorem ipsum dolor sit amet consectetur…
+                                        </p>
+                                    </div>
+
+                                    <button
+                                            class="item-toggle btn btn-link collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#extension1"
+                                            data-size-collapse-toggle
+                                            aria-expanded="false">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use href="#i-down"></use>
+                                        </svg>
+                                        <span class="visually-hidden">Toggle Extension 1</span>
+                                    </button>
+                                </div>
+
+                                <div class="item-collapse collapse" id="extension1">
+                                    <div class="tab-content-item-body">
+
+                                        <div class="my-4">
+                                            <button type="button"
+                                                    class="btn btn-primary w-100 js-extension-save">
+                                                Save
+                                            </button>
+                                        </div>
+
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-6">
+                                                <button type="button"
+                                                        class="shape-tile shape-tile-lg btn w-100 js-extension-choice"
+                                                        data-extension-value="ext1-opt1">
+                                    <span class="shape-tile__icon">
+                                        <img src="./assets/img/logo.svg" alt="">
+                                    </span>
+                                                    <span class="shape-tile__title">Title</span>
+                                                    <span class="shape-tile__price typo-label-m">Free</span>
+                                                </button>
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="button"
+                                                        class="shape-tile shape-tile-lg btn w-100 js-extension-choice"
+                                                        data-extension-value="ext1-opt2">
+                                    <span class="shape-tile__icon">
+                                        <img src="./assets/img/logo.svg" alt="">
+                                    </span>
+                                                    <span class="shape-tile__title">Title</span>
+                                                    <span class="shape-tile__price typo-label-m">Free</span>
+                                                </button>
+                                            </div>
+                                            <!-- …more choices if you want, just keep js-extension-choice + data-extension-value -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Extension 2 -->
+                            <div class="tab-content-item js-tab-content-item js-extension-item p-m">
+                                <div class="tab-content-item-header">
+                                    <div class="thumb-imitation-box typo-title-3 js-thumb-imitation-box">
+                                        2
+                                    </div>
+                                    <div class="head-main">
+                                        <div class="title typo-body-2">Extension 2</div>
+                                        <p class="description typo-caption-m pt-1">
+                                            Lorem ipsum dolor sit amet consectetur…
+                                        </p>
+                                    </div>
+
+                                    <button
+                                            class="item-toggle btn btn-link collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#extension2"
+                                            data-size-collapse-toggle
+                                            aria-expanded="false">
+                                        <svg class="icon" aria-hidden="true">
+                                            <use href="#i-down"></use>
+                                        </svg>
+                                        <span class="visually-hidden">Toggle Extension 2</span>
+                                    </button>
+                                </div>
+
+                                <div class="item-collapse collapse" id="extension2">
+                                    <div class="tab-content-item-body">
+
+                                        <div class="my-4">
+                                            <button type="button"
+                                                    class="btn btn-primary w-100 js-extension-save">
+                                                Save
+                                            </button>
+                                        </div>
+
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-6">
+                                                <button type="button"
+                                                        class="shape-tile shape-tile-lg btn w-100 js-extension-choice"
+                                                        data-extension-value="ext2-opt1">
+                                    <span class="shape-tile__icon">
+                                        <img src="./assets/img/logo.svg" alt="">
+                                    </span>
+                                                    <span class="shape-tile__title">Title</span>
+                                                    <span class="shape-tile__price typo-label-m">Free</span>
+                                                </button>
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="button"
+                                                        class="shape-tile shape-tile-lg btn w-100 js-extension-choice"
+                                                        data-extension-value="ext2-opt2">
+                                    <span class="shape-tile__icon">
+                                        <img src="./assets/img/logo.svg" alt="">
+                                    </span>
+                                                    <span class="shape-tile__title">Title</span>
+                                                    <span class="shape-tile__price typo-label-m">Free</span>
+                                                </button>
+                                            </div>
+                                            <!-- … -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </aside>
 
@@ -1591,6 +1695,27 @@
             </template>
 
         </section>
+    </div>
+</div>
+<div class="modal fade" id="fasteningVideoModal" tabindex="-1"
+     aria-labelledby="fasteningVideoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title typo-title-3-m" id="fasteningVideoTitle"></h2>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <video class="js-fastening-video-player"
+                       controls
+                       playsinline
+                       style="width: 100%; height: auto;">
+                    <source src="" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+        </div>
     </div>
 </div>
 

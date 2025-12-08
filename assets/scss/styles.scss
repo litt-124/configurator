@@ -182,6 +182,7 @@ body {
       width: 80px;
       border: 1px solid $border-1;
       border-radius: 4px;
+      object-fit: contain;
     }
 
     .thumb-imitation-box {
@@ -305,7 +306,16 @@ body {
     background: $neutral-white;
 
   }
-
+  &.shape-tile-lg{
+    height: 175px;
+    gap: 12px;
+    .shape-tile__icon{
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
   .shape-tile__title {
     color: $text-2;
     font-size: 12px;
@@ -526,3 +536,11 @@ body {
   padding: 4px 6px;
   cursor: pointer;
 }
+
+.modal-dialog{
+  @include media-breakpoint-up(md) {
+    width: 75%;
+  }  @include media-breakpoint-up(lg) {
+    width: 50%;
+  }
+  }

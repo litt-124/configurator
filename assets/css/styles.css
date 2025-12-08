@@ -318,6 +318,20 @@ body {
   gap: var(--space-10) !important;
 }
 
+/* Vertical stack helper: put space between children only */
+.stack > * + * {
+  margin-top: var(--stack-space, var(--space-4));
+}
+
+/* e.g. <div class="stack" style="--stack-space: var(--space-6)">… */
+/* Horizontal cluster helper (wrap with consistent gaps) */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cluster-space, var(--space-3));
+}
+
 /* Content padding presets from your guide (optional aliases) */
 .p-xxs {
   padding: var(--space-1) !important;
@@ -616,11 +630,12 @@ body {
 
 body {
   margin: 0;
-  font-family: var(--bs-body-font-family), serif;
+  font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
+  text-align: var(--bs-body-text-align);
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -12290,7 +12305,7 @@ textarea.form-control-lg {
 
 .btn-success {
   --bs-btn-color: #FFFFFF;
-  --bs-btn-bg: #338B93;
+  --bs-btn-bg: #33B893;
   --bs-btn-hover-color: #FFFFFF;
   --bs-btn-hover-bg: #27AB86;
   --bs-btn-active-color: #FFFFFF;
@@ -12884,6 +12899,7 @@ body {
   width: 80px;
   border: 1px solid #DEE2E6;
   border-radius: 4px;
+  object-fit: contain;
 }
 .tab-content-item .tab-content-item-header .thumb-imitation-box {
   height: 30px;
@@ -12976,6 +12992,16 @@ body {
 .shape-tile:hover, .shape-tile:focus, .shape-tile:active, .shape-tile.is-active {
   border: 1px solid #212529;
   background: #FFFFFF;
+}
+.shape-tile.shape-tile-lg {
+  height: 175px;
+  gap: 12px;
+}
+.shape-tile.shape-tile-lg .shape-tile__icon {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .shape-tile .shape-tile__title {
   color: #495056;
@@ -13191,6 +13217,17 @@ body {
   font-size: 14px;
   padding: 4px 6px;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 75%;
+  }
+}
+@media (min-width: 992px) {
+  .modal-dialog {
+    width: 50%;
+  }
 }
 
 /*# sourceMappingURL=styles.css.map */
